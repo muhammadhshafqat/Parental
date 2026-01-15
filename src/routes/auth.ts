@@ -26,16 +26,18 @@ router.post('/login', async (req: Request, res:Response) => {
 
 router.post('/register', async (req:Request, res:Response) => {
     const {email, password, dob, name} = req.body;
-
     const {data,error} = await supabase.auth.signUp({
-        name,
         email,
         password,
-        dob,
+        options: {
+            data: {
+                name,
+                dob,
+            }
+        }
     })
-
     if (error) {
-        return res.render('/register', {title: 'Register', error: error.message});
+        return res.render('register', {title: 'Register', error: error.message});
     }
 
     res.redirect('/dashboard')
