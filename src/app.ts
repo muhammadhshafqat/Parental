@@ -24,10 +24,8 @@ app.set('views', path.join(__dirname, '../public/views'));
 app.use(expressLayouts); 
 app.use(express.static('public'));
 app.set('layout', 'base');
-
-
-
-
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 
 app.get('/', (req, res) =>  {
