@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "esModuleInterop": true,
     "target": "es6",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "strict": true
   },
   "lib": ["es2015"]
 }
