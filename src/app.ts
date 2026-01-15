@@ -1,11 +1,16 @@
-import express from 'express';
-const app = express();
-const port = 3000;
+const express = require('express'); // import express
+const app = express(); // create an app instance
+const PORT = 3000;
 
+// middleware to parse JSON
+app.use(express.json());
+
+// simple route
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello, Express!');
 });
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
+// start server
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
