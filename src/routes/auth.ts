@@ -11,7 +11,6 @@ router.get('/register', (req,res) =>{
   res.render('register', {title: 'Create Account'});
 })
 
-
 router.post('/login', async (req: Request, res:Response) => {
     const {email, password} = req.body;
     const {data, error} = await supabase.auth.signInWithPassword({
@@ -24,5 +23,23 @@ router.post('/login', async (req: Request, res:Response) => {
 
     res.redirect('/dashboard');
 })
+
+router.post('/register', async (req:Request, res:Response) => {
+    const {email, password, dob, name} = req.body;
+
+    const {data,error} = await supabase.auth.signUp({
+        name,
+        email,
+        password,
+        dob,
+    })
+
+    if (error) {
+        return res.render('/register', {title: 'Register', error: error.message});
+    }
+
+    res.redirect('/dashboard')
+})
+
 
 export default router;
