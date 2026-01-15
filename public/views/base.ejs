@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <% if (typeof style !== 'undefined'){ %> 
+    <%- style %>
+  <% } %>
+</head>
+<body>
+  <header>
+    <h1>My Site</h1>
+  </header>
+
+  <main>
+    <%- body %>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Muhammad</p>
+  </footer>
+</body>
+</html>
