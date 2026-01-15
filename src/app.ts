@@ -1,15 +1,34 @@
 import express from 'express';
 import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
+import dotenv from 'dotenv';
+dotenv.config();
 
+//database
+import { createClient } from '@supabase/supabase-js';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseKey || !supabaseUrl){
+  throw new Error("Missing Url and Key");
+}
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+// set app
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
+// layout setup templating
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../public/views'));
 app.use(expressLayouts); 
 app.use(express.static('public'));
 app.set('layout', 'base');
+
+
+
+
+
 
 app.get('/', (req, res) =>  {
   res.render('home', {title : 'Home'});

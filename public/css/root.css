@@ -10,12 +10,12 @@ body {
 }
 
 * {
-  font-family: 'NM-M', sans-serif;
+  font-family: 'NM-R', sans-serif;
   box-sizing: border-box;
 }
 
 :root {
-  --prime: #0B0B0E; /* Added a primary color */
+  --prime: #0B0B0E;
   --accent: #DC794D;
   --base: #f3f2f1;
   --radi: 13px;
