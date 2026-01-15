@@ -11,11 +11,7 @@ app.use(expressLayouts);
 app.use(express.static('public'));
 app.set('layout', 'base');
 
-app.get('/', (req, res) => {
-  res.send('Hello Hassan World!');
-});
-
-app.get('/home', (req, res) =>  {
+app.get('/', (req, res) =>  {
   res.render('home', {title : 'Home'});
 });
 
@@ -25,6 +21,10 @@ app.get('/login', (req, res) => {
 
 app.get('/register', (req,res) =>{
   res.render('register', {title: 'Create Account'});
+})
+
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard', {title: 'Dashboard'});
 })
 
 app.listen(port, () => {

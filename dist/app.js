@@ -14,9 +14,6 @@ app.use(express_ejs_layouts_1.default);
 app.use(express_1.default.static('public'));
 app.set('layout', 'base');
 app.get('/', (req, res) => {
-    res.send('Hello Hassan World!');
-});
-app.get('/home', (req, res) => {
     res.render('home', { title: 'Home' });
 });
 app.get('/login', (req, res) => {
@@ -24,6 +21,9 @@ app.get('/login', (req, res) => {
 });
 app.get('/register', (req, res) => {
     res.render('register', { title: 'Create Account' });
+});
+app.get('/dashboard', (req, res) => {
+    res.render('dashboard', { title: 'Dashboard' });
 });
 app.listen(port, () => {
     return console.log(`Server: http://localhost:${port}`);
