@@ -35,7 +35,7 @@ border-radius: var(--radi);
 .auth-label {
     display: block;
     font-family: 'NM-R';
-    margin-top: 8px;
+    margin-top: 12px;
 }
 .auth-label a {
     text-decoration: none;
