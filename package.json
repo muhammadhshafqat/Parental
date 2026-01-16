@@ -25,10 +25,14 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@google/genai": "^1.37.0",
+    "@modelcontextprotocol/sdk": "^1.25.2",
     "@supabase/supabase-js": "^2.90.1",
     "dotenv": "^17.2.3",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
-    "express-ejs-layouts": "^2.5.1"
+    "express-ejs-layouts": "^2.5.1",
+    "install": "^0.13.0",
+    "npm": "^11.7.0"
   }
 }

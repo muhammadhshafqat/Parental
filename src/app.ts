@@ -2,7 +2,12 @@ import express from 'express';
 import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
 import dotenv from 'dotenv';
+import { GoogleGenAI } from '@google/genai';
+
 dotenv.config();
+
+//ai client
+const aiClient = new GoogleGenAI({});
 
 //database
 import { createClient } from '@supabase/supabase-js';
