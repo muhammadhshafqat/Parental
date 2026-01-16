@@ -3,6 +3,10 @@ import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
+import dashRouter from './routes/dashboard';
+
+// @ts-ignore
+// import engine from "ejs-mate";
 
 dotenv.config();
 
@@ -23,6 +27,8 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
 const port = process.env.PORT;
 
+// app.engine('ejs', engine);
+
 // layout setup templating
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../public/views'));
@@ -41,9 +47,7 @@ app.get('/', (req, res) =>  {
 import authRoutes from './routes/auth';
 app.use('/', authRoutes)
 
-app.get('/dashboard', (req, res) => {
-  res.render('dashboard', {title: 'Dashboard'});
-})
+app.get('/dashboard', dashRouter);
 
 app.listen(port, () => {
   return console.log(`Server: http://localhost:${port}`);
