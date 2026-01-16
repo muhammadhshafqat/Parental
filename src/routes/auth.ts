@@ -21,11 +21,15 @@ router.post('/login', async (req: Request, res:Response) => {
         return res.render('login', {title: 'Login', error: error.message});
     }
 
+    res.cookie('sb-access-token', data.session.access_token, {httpOnly: true});
     res.redirect('/dashboard');
 })
 
 router.post('/register', async (req:Request, res:Response) => {
-    const {email, password, dob, name} = req.body;
+    const {email, password, cpassword, dob, name} = req.body;
+    if (cpassword != password){
+        return res.render('register', {title: "Register", error: "Passwords do not match"});
+    }
     const {data,error} = await supabase.auth.signUp({
         email,
         password,
@@ -39,7 +43,6 @@ router.post('/register', async (req:Request, res:Response) => {
     if (error) {
         return res.render('register', {title: 'Register', error: error.message});
     }
-
     res.redirect('/dashboard')
 })
 
