@@ -32,6 +32,7 @@ app.get('/', (req, res) =>  {
   res.render('home', {title : 'Home'});
 });
 
+
 import authRoutes from './routes/auth';
 app.use('/', authRoutes)
 
