@@ -1,6 +1,6 @@
 function validpass() {
-    const password = document.getElementById('password');
-    const cpassword = document.getElementById('cpassword');
+    const password = document.getElementById('password').value;
+    const cpassword = document.getElementById('cpassword').value;
 
     if (password !== cpassword){
         alert("Passwords do not match")
