@@ -4,10 +4,7 @@ import expressLayouts from 'express-ejs-layouts';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 import dashRouter from './routes/dashboard';
-
-// @ts-ignore
-// import engine from "ejs-mate";
-
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 //ai client
@@ -27,7 +24,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
 const port = process.env.PORT;
 
-// app.engine('ejs', engine);
+app.use(cookieParser());
 
 // layout setup templating
 app.set('view engine', 'ejs');
