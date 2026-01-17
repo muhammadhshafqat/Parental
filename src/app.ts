@@ -47,7 +47,7 @@ app.get('/', (req, res) =>  {
 import authRoutes from './routes/auth';
 app.use('/', authRoutes)
 
-app.get('/dashboard', dashRouter);
+app.use('/dashboard', dashRouter);
 
 app.listen(port, () => {
   return console.log(`Server: http://localhost:${port}`);

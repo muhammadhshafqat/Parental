@@ -4,7 +4,7 @@ const dashRouter: Router = Router();
 
 
 // need to implement security middleware to prevent non-login users from accessing dashboard
-dashRouter.use('/', (_, res) => {
+dashRouter.use('/', (reqs, res) => {
 
     res.render('dashboard', {layout: 'dashboard-base'});
 
