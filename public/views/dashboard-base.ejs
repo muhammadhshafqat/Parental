@@ -1,10 +1,27 @@
-<%- contentFor('head') %>
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/main.css"> 
   <link rel="stylesheet" type="text/css" href="/css/dash.css" />
+  <%- defineContent('head') %> 
 
-<%- contentFor('footer') %>
-  <script src="/js/dash.js"></script>
 
-<div class="divider"></div>
-<div id="dashboard-container">
+</head>
+<body>
+  <header><h1>Parental</h1></header>
+  <div class="divider"></div>
+
+  <div id="dashboard-container">
     <%- body %>
-</div>
+  </div>
+
+  <footer><p>&copy; 2026 Hassan Square</p></footer>
+
+  <script src="/js/dash.js"></script>
+  <%- defineContent('footer') %>
+
+
+</body>
+</html>
