@@ -1,13 +1,11 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 
 const dashRouter: Router = Router();
 
 
 // need to implement security middleware to prevent non-login users from accessing dashboard
-dashRouter.use('/', (reqs, res) => {
-
-    res.render('dashboard', {layout: 'dashboard-base'});
-
+dashRouter.get('/', (reqs, res) => {
+    res.render('dashboard', {title: 'dashboard'});
 });
 
 export default dashRouter;
