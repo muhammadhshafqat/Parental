@@ -42,7 +42,7 @@ app.get('/', (req, res) =>  {
 import authRoutes from './routes/auth';
 app.use('/', authRoutes)
 
-// dashboard route
+import dasgRouter from './routes/dashboard';
 app.use('/dashboard', dashRouter);
 
 app.listen(port, () => {
