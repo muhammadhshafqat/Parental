@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { supabase } from "../app";
+// import { supabase } from "../app";
 
 const dashRouter: Router = Router();
 
