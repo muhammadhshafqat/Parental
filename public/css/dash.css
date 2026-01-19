@@ -137,3 +137,34 @@ header {
 
 
 /* Dashboard divs */
+#dashMainContainer{
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 10% 90%;
+
+    /*Areas*/
+    grid-template-areas: 
+    "child child"
+    "data ai";
+
+    gap: 20px;
+}
+
+#dataDiv, #aiDiv{
+
+    background-color: white;
+    border-radius: 10px;
+    min-height: 70vh;
+   
+
+}
+#dataDiv{
+    grid-area: data;
+}
+
+#aiDiv{
+    grid-area: ai;
+}
+

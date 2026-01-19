@@ -6,10 +6,8 @@ import { GoogleGenAI } from '@google/genai';
 import dashRouter from './routes/dashboard';
 dotenv.config();
 
-//ai client
-const aiClient = new GoogleGenAI({});
+// ------------------------------ DATABASE SETUP ---------------------------
 
-//database
 import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -17,11 +15,20 @@ const supabaseKey = process.env.SUPABASE_KEY;
 if (!supabaseKey || !supabaseUrl){
   throw new Error("Missing Url and Key");
 }
+
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-// set app
+
+
+
+// --------------------------------------- AI CLIENT --------------------------
+const aiClient = new GoogleGenAI({});
+
+
+
+//----------------------------------------------- APP SETUP ---------------------------------
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 
 // layout setup templating
@@ -34,6 +41,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 
+//----------------------------------------------------- ROUTING ------------------------------
 app.get('/', (req, res) =>  {
   res.render('home', {title : 'Home'});
 });
@@ -45,6 +53,9 @@ app.use('/', authRoutes)
 import dasgRouter from './routes/dashboard';
 app.use('/dashboard', dashRouter);
 
+
+
+// ------------------------------------------------------- APP STARTUP   ----------------------
 app.listen(port, () => {
   return console.log(`Server: http://localhost:${port}`);
 });
