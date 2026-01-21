@@ -8,7 +8,7 @@ const dashRouter: Router = Router();
 
 async function requireAuth(req: Request, res: Response, next: NextFunction) {
 
-	const supabase = createClient({req, res, next});
+	const supabase = createClient({req, res});
 
 	const {data, error} = await supabase.auth.getUser();
 

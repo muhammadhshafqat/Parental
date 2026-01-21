@@ -3,9 +3,6 @@ import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
 import ENV from "./ENV/ENV";
 import { GoogleGenAI } from '@google/genai';
-import dashRouter from './routes/dashboard';
-import { SupabaseClient } from '@supabase/supabase-js';
-
 
 // --------------------------------------- AI CLIENT --------------------------
 const aiClient = new GoogleGenAI({});
@@ -33,12 +30,13 @@ app.get('/', (req, res) =>  {
 
 
 import authRoutes from './routes/auth';
-import { create } from 'domain';
 app.use('/', authRoutes)
 
-import dasgRouter from './routes/dashboard';
+import dashRouter from './routes/dashboard';
 app.use('/dashboard', dashRouter);
 
+import callbackRouter from "./routes/callbackRedirect";
+app.use('/callbackRedirect', callbackRouter);
 
 
 // ------------------------------------------------------- APP STARTUP   ----------------------

@@ -1,5 +1,5 @@
 import {Router, Request, Response} from 'express';
-import { supabase } from '../app';
+import { createClient } from '../utils/database/server-database';
 const router = Router();
 
 router.get('/login', (req, res) => {
@@ -14,6 +14,8 @@ router.post('/login', async (req: Request, res:Response) => {
 
 
     const {email, password} = req.body;
+
+    const supabase = createClient({req, res});
 
     const {data, error} = await supabase.auth.signInWithPassword({
         email,
@@ -34,6 +36,8 @@ router.post('/register', async (req:Request, res:Response) => {
         return res.render('register', {title: "Register", error: "Passwords do not match"});
     }
     
+    const supabase = createClient({req, res});
+
     const {data,error} = await supabase.auth.signUp({
         email,
         password,

@@ -5,7 +5,7 @@ import { parse } from "dotenv";
 
 
 // ------------------------- CREATE CLIENT FUNCTION------------
-export const createClient =  (context: {req: Request, res: Response, next: NextFunction}) =>{
+export const createClient =  (context: {req: Request, res: Response}) =>{
 
     return createServerClient(ENV.supabaseUrl, ENV.supabaseKey, {
         cookies:{
