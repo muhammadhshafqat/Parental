@@ -1,4 +1,3 @@
-
 // ----------------------- DATABASE RELEVANT TYPES ------------------------------
 
 export type eventRecord = {

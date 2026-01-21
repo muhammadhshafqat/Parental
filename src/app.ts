@@ -2,21 +2,18 @@ import express from 'express';
 import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
 import dotenv from 'dotenv';
+dotenv.config();
 import { GoogleGenAI } from '@google/genai';
 import dashRouter from './routes/dashboard';
-dotenv.config();
+import { SupabaseClient } from '@supabase/supabase-js';
 
-// ------------------------------ DATABASE SETUP ---------------------------
+export const supabaseKey = process.env.SUPABASE_KEY;
+export const supabaseUrl = process.env.SUPABASE_URL;
 
-import { createClient } from '@supabase/supabase-js';
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
 
 if (!supabaseKey || !supabaseUrl){
-  throw new Error("Missing Url and Key");
+  throw new Error("Missing the database key");
 }
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
 
 
 
@@ -48,6 +45,7 @@ app.get('/', (req, res) =>  {
 
 
 import authRoutes from './routes/auth';
+import { create } from 'domain';
 app.use('/', authRoutes)
 
 // dashboard route

@@ -1,30 +1,42 @@
-import { Router, Request, Response, NextFunction } from "express";
-// import { supabase } from "../app";
+import { Router, Request, Response } from "express";
+import * as appTypes from "../utils/common";
+// import { getData } from "../utils/database";
+import { User } from "@supabase/supabase-js";
+import { createClient } from "../app";
 
 const dashRouter: Router = Router();
 
-// async function requireAuth(req: Request, res: Response, next: NextFunction) {
-//   const token = req.cookies?.['sb-access-token'];
-//   if (!token) {
-//     return res.redirect('/login');
-//   }
+// // checks authentication
+export async function requireAuth(req: Request, res: Response, next) {
+  
+  // creating the server client
+  const supabaseServerClient = createClient({req, res});
 
-//   try {
-//     const {data,error} = await supabase.auth.getUser(token);
-//     if (error || !data.user) {
-//       return res.redirect('/login');
-//     }
-//     next();
-//   } catch (err) {
-//     console.error(err);
-//     return res.redirect('/login');
-//   } 
-// }
+  const {data: user} = await supabaseServerClient.auth.getUser();
 
-dashRouter.get('/', (req: Request, res: Response) => {
-  res.locals.title = "Dashboard";
-  res.locals.layout = "dashboard-base";
-  res.render("dashboard", {layout: 'dashboard-base'});
+
+  if (!user.user){
+
+    console.log("No user logged in");
+    res.redirect('/login');
+    return;
+
+  }else{
+    console.log(`User  authorized`);
+    next();    
+  }
+
+  return;
+
+};
+
+dashRouter.use(requireAuth);
+
+dashRouter.get('/', (req, res)=>{
+
+  console.log("in dashRouter");
+  res.render('dashboard' , {layout: 'dashboard-base'})
+
 });
 
 export default dashRouter;
