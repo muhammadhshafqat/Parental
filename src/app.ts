@@ -1,14 +1,13 @@
 import express from 'express';
 import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
-import dotenv from 'dotenv';
-dotenv.config();
+import ENV from "./ENV/ENV";
 import { GoogleGenAI } from '@google/genai';
 import dashRouter from './routes/dashboard';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = ENV.supabaseKey;
+const supabaseUrl = ENV.supabaseUrl;
 
 
 if (!supabaseKey || !supabaseUrl){
