@@ -5,29 +5,23 @@ import { supabase } from "../app";
 
 const dashRouter: Router = Router();
 
-// // checks authentication
-export async function requireAuth(req: Request, res: Response, next) {
-  
+// async function requireAuth(req: Request, res: Response, next: NextFunction) {
+//   const token = req.cookies?.['sb-access-token'];
+//   if (!token) {
+//     return res.redirect('/login');
+//   }
 
-  const {data: user} = await supabase.auth.getUser();
-
-
-  if (!user.user){
-
-    console.log("No user logged in");
-    res.redirect('/login');
-    return;
-
-  }else{
-    console.log(`User  authorized`);
-    next();    
-  }
-
-  return;
-
-};
-
-dashRouter.use(requireAuth);
+//   try {
+//     const {data,error} = await supabase.auth.getUser(token);
+//     if (error || !data.user) {
+//       return res.redirect('/login');
+//     }
+//     next();
+//   } catch (err) {
+//     console.error(err);
+//     return res.redirect('/login');
+//   } 
+// }
 
 dashRouter.get('/', (req, res)=>{
 

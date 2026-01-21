@@ -49,7 +49,7 @@ import authRoutes from './routes/auth';
 import { create } from 'domain';
 app.use('/', authRoutes)
 
-// dashboard route
+import dasgRouter from './routes/dashboard';
 app.use('/dashboard', dashRouter);
 
 
