@@ -1,5 +1,5 @@
 import {Router, Request, Response} from 'express';
-import { createClient } from '../utils/database';
+import { supabase } from '../app';
 const router = Router();
 
 router.get('/login', (req, res) => {
@@ -12,7 +12,6 @@ router.get('/register', (req,res) =>{
 
 router.post('/login', async (req: Request, res:Response) => {
 
-    const supabase = createClient({req,res});
 
     const {email, password} = req.body;
 
@@ -21,14 +20,11 @@ router.post('/login', async (req: Request, res:Response) => {
         password,
     });
     if (error) {
-        console.log("Wrong Password");
         console.log(error.message);
         return res.render('login', {title: 'Login', error: error.message});
     }
 
-    
-
-    // res.cookie('sb-access-token', data.session.access_token, {httpOnly: true});
+    res.cookie('sb-access-token', data.session.access_token, {httpOnly: true});
     res.redirect('/dashboard');
 })
 
@@ -38,8 +34,6 @@ router.post('/register', async (req:Request, res:Response) => {
         return res.render('register', {title: "Register", error: "Passwords do not match"});
     }
     
-    const supabase = createClient({req, res});
-
     const {data,error} = await supabase.auth.signUp({
         email,
         password,

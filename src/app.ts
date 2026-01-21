@@ -7,8 +7,8 @@ import { GoogleGenAI } from '@google/genai';
 import dashRouter from './routes/dashboard';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-export const supabaseKey = process.env.SUPABASE_KEY;
-export const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
 
 
 if (!supabaseKey || !supabaseUrl){
@@ -16,7 +16,8 @@ if (!supabaseKey || !supabaseUrl){
 }
 
 
-
+// ------------------------- DATABASE ------------
+export const supabase = new SupabaseClient(supabaseUrl, supabaseKey);
 
 // --------------------------------------- AI CLIENT --------------------------
 const aiClient = new GoogleGenAI({});
