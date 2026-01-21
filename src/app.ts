@@ -6,21 +6,9 @@ import { GoogleGenAI } from '@google/genai';
 import dashRouter from './routes/dashboard';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseKey = ENV.supabaseKey;
-const supabaseUrl = ENV.supabaseUrl;
-
-
-if (!supabaseKey || !supabaseUrl){
-  throw new Error("Missing the database key");
-}
-
-
-// ------------------------- DATABASE ------------
-export const supabase = new SupabaseClient(supabaseUrl, supabaseKey);
 
 // --------------------------------------- AI CLIENT --------------------------
 const aiClient = new GoogleGenAI({});
-
 
 
 //----------------------------------------------- APP SETUP ---------------------------------

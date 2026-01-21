@@ -1,3 +1,7 @@
+import { getSupabase } from "./supabase-client";
+
+getSupabase();
+
 document.addEventListener("DOMContentLoaded", () => {
        
     console.log("h")

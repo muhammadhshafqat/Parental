@@ -1,31 +1,34 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import * as appTypes from "../utils/common";
-// import { getData } from "../utils/database";
-import { supabase } from "../app";
+import { createClient } from "../utils/database/server-database";
+
+
 
 const dashRouter: Router = Router();
 
-// async function requireAuth(req: Request, res: Response, next: NextFunction) {
-//   const token = req.cookies?.['sb-access-token'];
-//   if (!token) {
-//     return res.redirect('/login');
-//   }
+async function requireAuth(req: Request, res: Response, next: NextFunction) {
 
-//   try {
-//     const {data,error} = await supabase.auth.getUser(token);
-//     if (error || !data.user) {
-//       return res.redirect('/login');
-//     }
-//     next();
-//   } catch (err) {
-//     console.error(err);
-//     return res.redirect('/login');
-//   } 
-// }
+	const supabase = createClient({req, res, next});
 
-dashRouter.get('/', (req, res)=>{
+	const {data, error} = await supabase.auth.getUser();
 
-  res.render('dashboard' , {layout: 'dashboard-base'})
+	if(error){
+
+		res.redirect('/login');
+
+	}else{
+
+		next();
+
+	}
+
+}
+
+dashRouter.use(requireAuth);
+
+dashRouter.get('/', (req, res) => {
+
+    res.render('dashboard', { layout: 'dashboard-base' })
 
 });
 
