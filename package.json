@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "dev": "npm run build && node ./dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -19,15 +20,22 @@
   },
   "homepage": "https://github.com/muhammadhshafqat/Parental#readme",
   "devDependencies": {
+    "@types/cookie": "^0.6.0",
     "@types/express": "^5.0.6",
     "@types/express-ejs-layouts": "^2.5.4",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@google/genai": "^1.37.0",
+    "@modelcontextprotocol/sdk": "^1.25.2",
+    "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.90.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
-    "express-ejs-layouts": "^2.5.1"
+    "express-ejs-layouts": "^2.5.1",
+    "install": "^0.13.0",
+    "npm": "^11.7.0"
   }
 }

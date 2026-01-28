@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title><%= title %></title>
-<link rel="stylesheet" href="../css/main.css"> 
-<script src="../js/main.js"></script>
-  <% if (typeof style !== 'undefined'){ %> 
-    <%- style %>
-  <% } %>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/main.css"> 
+  <%- defineContent('head') %> 
 </head>
 <body>
-  <header>
-    <h1>Parental</h1>
-  </header>
+  <header><h1>Parental</h1></header>
 
   <main>
     <%- body %>
   </main>
 
-  <footer>
-    <p>&copy; 2026 Hassan Sqaure</p>
-  </footer>
+  <footer><p>&copy; 2026 Hassan Sqaure</p></footer>
+
+  <%- defineContent('footer') %>
 </body>
 </html>

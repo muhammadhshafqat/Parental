@@ -1,0 +1,334 @@
+@import url(root.css);
+
+.divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--base);
+    font-family: sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    border-bottom: 1px solid #eee;
+}
+
+#dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.account-section {
+    position: relative;
+}
+
+/* --- UPDATED ACCOUNT BUTTON STYLES --- */
+.account-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: 1px solid #c9c9c9;
+    border-radius: 40px;
+    /* More rounded for the 'pill' look */
+    padding: 6px 16px 6px 6px;
+    /* Less left padding to hug the photo */
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.account-btn:hover {
+    border-color: var(--accent);
+    background: #fafafa;
+}
+
+/* Elements to hide during collapse */
+.account-btn span,
+.account-btn .dropdown-arrow {
+    transition: opacity 0.3s ease, max-width 0.5s ease, margin 0.5s ease;
+    max-width: 150px;
+    opacity: 1;
+}
+
+/* Collapsed State */
+.account-btn.collapsed {
+    padding-right: 6px;
+    /* Equal padding for a circular look */
+    gap: 0;
+}
+
+.account-btn.collapsed span,
+.account-btn.collapsed .dropdown-arrow {
+    max-width: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+/* Auto-expand on hover if collapsed */
+.account-btn.collapsed:hover {
+    padding-right: 16px;
+    gap: 12px;
+}
+
+.account-btn.collapsed:hover span,
+.account-btn.collapsed:hover .dropdown-arrow {
+    max-width: 150px;
+    opacity: 1;
+}
+
+/* --- REST OF STYLES --- */
+.account-photo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    /* Prevents photo from shrinking */
+}
+
+.dropdown-arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--prime);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--radi);
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 100;
+}
+
+.dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: var(--prime);
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.dropdown-item:hover {
+    background: #f8f8f8;
+}
+
+.dropdown-item.logout {
+    color: #dc3545;
+    border-top: 1px solid #e0e0e0;
+}
+
+
+/* Dashboard divs */
+#dashMainContainer {
+    margin-top: 0;
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 10% 90%;
+
+    /*Areas*/
+    grid-template-areas:
+        "child child"
+        "data ai";
+
+    gap: 20px;
+}
+
+#dataDiv,
+#aiDiv {
+
+    background-color: white;
+    border-radius: 10px;
+    min-height: 70vh;
+
+
+}
+
+#dataDiv {
+    grid-area: data;
+}
+
+#aiDiv {
+    grid-area: ai;
+}
+
+/* Children Selector Styling */
+#children-selector{
+
+    width: 100%;
+    
+    grid-area: child;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#children-sector::-webkit-scrollbar {
+    display: none;
+}
+
+.name-btn {
+    /* Layout & Sizing */
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: var(--radi);
+
+    /* Colors & Borders */
+    color: black;
+    background-color: transparent;
+    border: 1px solid black;
+
+    /* Text Styling */
+    font-family: 'NM-R', sans-serif;
+    font-size: 1rem;
+
+    /* Smooth Animation */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    /* overflow: hidden; */
+}
+
+.name-btn:hover {
+    color: var(--prime);
+    background-color: white;
+    border: 1px solid white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0,0.2 );
+    /* Glow using accent color */
+}
+
+.name-btn:active {
+    transform: translateY(-1px);
+}
+
+
+/* The info div*/
+#dataDiv {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+#data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+#data-header h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-family: 'NM-B', sans-serif;
+}
+
+#data-header span {
+    background: var(--base);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+
+.data-section {
+    margin-bottom: 50px;
+}
+
+.data-section h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.event-list {
+    list-style: none;
+    padding: 0;
+}
+
+.event-list li {
+    display: flex;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.event-date {
+    font-weight: bold;
+    color: var(--accent);
+    min-width: 60px;
+}
+
+/* Footer Button Styling */
+#data-footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.calendar-btn {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    background: white;
+    border: 1px solid #dadce0;
+    border-radius: var(--radi);
+    font-family: 'NM-M', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.calendar-btn:hover {
+    background: #f8f9fa;
+    border-color: #d2d2d2;
+}   
