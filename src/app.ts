@@ -1,11 +1,7 @@
 import express from 'express';
 import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
-import ENV from "./ENV/ENV";
-import { GoogleGenAI } from '@google/genai';
 
-// --------------------------------------- AI CLIENT --------------------------
-const aiClient = new GoogleGenAI({});
 
 
 //----------------------------------------------- APP SETUP ---------------------------------
