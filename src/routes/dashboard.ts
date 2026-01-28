@@ -24,11 +24,26 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
 
 }
 
+
 dashRouter.use(requireAuth);
 
 dashRouter.get('/', (req, res) => {
 
     res.render('dashboard', { layout: 'dashboard-base' })
+
+});
+
+
+dashRouter.get('/chat', (req, res)=>{
+
+	res.render('chat', {layout: 'dashboard-base'});
+
+
+})
+
+dashRouter.post('/chat', (req, res)=>{
+
+	req
 
 });
 

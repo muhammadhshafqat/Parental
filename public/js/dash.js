@@ -1,13 +1,6 @@
 import {getSupabase} from "./supabase-client";
 
 const supabase = getSupabase();
-export const user = supabase.auth.getUser();
-
-if(user){
-
-    
-
-}
 
 document.addEventListener("DOMContentLoaded", () => {
        
@@ -21,9 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const btn = document.getElementById('accountBtn');
-    if(btn) btn.classList.add('collapsed');
-    
-    
+    if(btn) btn.classList.add('collapsed');    
 
 });
 
+
+
+// event handler for syllabus button
+async function selectSyllabus(){
+
+    // if clicked then use the olevel and alevel syllabi to create a list of topic year by year to use for the parent
+
+}
