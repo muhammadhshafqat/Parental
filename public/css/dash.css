@@ -9,7 +9,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: var(--base);
+    background: red;
     font-family: sans-serif;
 }
 
