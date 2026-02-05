@@ -21,6 +21,7 @@ body {
   --accent: #DC794D;
   --base: #f3f2f1;
   --radi: 14px;
+  --text-secondary: #3a3a3c;
 }
 
 @font-face {
@@ -41,13 +42,18 @@ body {
 }
 
 header {
-  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 40px;
   font-size: x-small;
   width: 100%;
-  padding: 16px;
   font-family: 'NM-B', sans-serif;
 }
-
+header a{
+  text-decoration: none;
+  color: #0B0B0E;
+}
 footer {
   text-align: center;
   position: fixed;
