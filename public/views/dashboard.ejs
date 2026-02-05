@@ -1,7 +1,7 @@
 <script>
   window.childrenData = <%- JSON.stringify(children || []).replace(/</g, '\\u003c') %>;
 </script>
-
+<h1 class="into-heading"><%= user.name %>'s Parenting Assistant</h1>
 
 <div id="dashMainContainer">
   <!-- Children Selector -->
@@ -104,3 +104,18 @@
 
 <!-- Client script for interactivity -->
 <script src="/js/dash.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const childButtons = document.querySelectorAll(".name-btn");
+
+  childButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // remove active from all
+      childButtons.forEach((b) => b.classList.remove("active"));
+      // add active to the clicked one
+      btn.classList.add("active-name");
+    });
+  });
+});
+</script>

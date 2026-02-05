@@ -26,13 +26,29 @@ dashRouter.get("/", async (req: Request, res: Response) => {
   const supabase = createClient({ req, res });
 
   try {
-    // Get logged-in user
+    // Get logged-in auth user
     const { data: userData, error: userErr } = await supabase.auth.getUser();
     if (userErr) {
       console.error("Error getting user:", userErr);
       return res.status(500).send("Server error");
     }
     const userId = userData?.user?.id;
+
+    // Fetch row from users table
+    let userRow = null;
+    if (userId) {
+      const { data: dbUser, error: dbErr } = await supabase
+        .from("users")
+        .select("id, name, email")
+        .eq("id", userId)
+        .single();
+
+      if (dbErr) {
+        console.error("Error fetching user row:", dbErr);
+      } else {
+        userRow = dbUser;
+      }
+    }
 
     let children: any[] = [];
 
@@ -46,7 +62,6 @@ dashRouter.get("/", async (req: Request, res: Response) => {
       if (ucError) {
         console.error("Error fetching UserChildren:", ucError);
       } else if (ucData) {
-        // Normalize children array
         children = ucData
           .map((row: any) => row.Children)
           .filter(Boolean)
@@ -54,11 +69,15 @@ dashRouter.get("/", async (req: Request, res: Response) => {
             id: c.id,
             name: c.name,
             age: c.age,
-            interests: Array.isArray(c.interests) ? c.interests : (c.interests ? [c.interests] : []),
-            events: []
+            interests: Array.isArray(c.interests)
+              ? c.interests
+              : c.interests
+              ? [c.interests]
+              : [],
+            events: [],
           }));
 
-        // Fetch events for each child and normalize times to ISO strings
+        // Fetch events for each child
         for (const child of children) {
           try {
             const { data: ceData, error: ceError } = await supabase
@@ -77,7 +96,7 @@ dashRouter.get("/", async (req: Request, res: Response) => {
                   id: ev.id,
                   name: ev.name,
                   location: ev.location,
-                  time: ev.time ? new Date(ev.time).toISOString() : null
+                  time: ev.time ? new Date(ev.time).toISOString() : null,
                 }));
             } else {
               child.events = [];
@@ -90,13 +109,13 @@ dashRouter.get("/", async (req: Request, res: Response) => {
       }
     }
 
-    // Debug log (remove in production)
     console.debug("Children prepared for render:", JSON.stringify(children));
 
     res.render("dashboard", {
       layout: "dashboard-base",
       children,
-      firstChild: children.length > 0 ? children[0] : null
+      firstChild: children.length > 0 ? children[0] : null,
+      user: userRow, // <-- now has .name from your users table
     });
   } catch (err) {
     console.error("Dashboard route error:", err);
@@ -115,7 +134,6 @@ dashRouter.get("/chat", (req: Request, res: Response) => {
 });
 
 dashRouter.post("/chat", (req: Request, res: Response) => {
-  // handle chat post logic here
   res.sendStatus(200);
 });
 
@@ -124,12 +142,11 @@ dashRouter.get("/children", (req: Request, res: Response) => {
   res.render("enterchild", { layout: "dashboard-base", title: "Add Child" });
 });
 
-// Handle child creation form submission (no admin client)
+// Handle child creation form submission
 dashRouter.post("/children/add", async (req: Request, res: Response) => {
   const supabase = createClient({ req, res });
 
   try {
-    // 1) Get auth user
     const { data: userData, error: userErr } = await supabase.auth.getUser();
     if (userErr || !userData?.user?.id) {
       console.error("No authenticated user:", userErr);
@@ -142,7 +159,6 @@ dashRouter.post("/children/add", async (req: Request, res: Response) => {
       userData.user.user_metadata?.name ??
       null;
 
-    // 2) Upsert users row using the same client (this will be subject to RLS)
     const { data: upsertUser, error: upsertErr } = await supabase
       .from("users")
       .upsert({ id: userId, email: userEmail, name: userName }, { onConflict: "id" })
@@ -150,13 +166,12 @@ dashRouter.post("/children/add", async (req: Request, res: Response) => {
       .single();
 
     if (upsertErr) {
-      // Surface the error so you can see if RLS/policy is blocking the upsert
       console.error("Upsert users row failed:", upsertErr);
-      // Return a clear error so you can fix policy or auth forwarding
-      return res.status(500).send("Server error creating user record. Check RLS/policies and that the request is authenticated.");
+      return res
+        .status(500)
+        .send("Server error creating user record. Check RLS/policies and that the request is authenticated.");
     }
 
-    // 3) Validate and insert child
     const { name, age, interests } = req.body;
     if (!name || !age) {
       return res.status(400).send("Name and age are required");
@@ -177,7 +192,6 @@ dashRouter.post("/children/add", async (req: Request, res: Response) => {
       return res.status(500).send("Error creating child");
     }
 
-    // 4) Insert join row linking user -> child
     const { data: linkData, error: linkErr } = await supabase
       .from("UserChildren")
       .insert([{ user_id: userId, child_id: child.id }])
@@ -186,18 +200,17 @@ dashRouter.post("/children/add", async (req: Request, res: Response) => {
 
     if (linkErr) {
       console.error("Error linking child to user:", linkErr);
-      // rollback child insert to avoid orphan
       try {
         await supabase.from("Children").delete().eq("id", child.id);
         console.debug("Rolled back child insert due to link failure.");
       } catch (delErr) {
         console.error("Failed to rollback child insert:", delErr);
       }
-      // If this fails with 23503, it means users row is still missing — check upsertErr or RLS
-      return res.status(500).send("Error linking child to user. Check that a users row exists and RLS/policies allow this operation.");
+      return res
+        .status(500)
+        .send("Error linking child to user. Check that a users row exists and RLS/policies allow this operation.");
     }
 
-    // Success — redirect to dashboard
     return res.redirect("/dashboard");
   } catch (err) {
     console.error("Unexpected error in /children/add:", err);
