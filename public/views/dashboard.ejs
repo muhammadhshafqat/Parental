@@ -1,64 +1,106 @@
+<script>
+  window.childrenData = <%- JSON.stringify(children || []).replace(/</g, '\\u003c') %>;
+</script>
+
+
 <div id="dashMainContainer">
-    <div id="children-selector">
-        <button class="name-btn">Julianna Vance</button>
-        <button class="name-btn">Marcus Thorne</button>
-        <button class="name-btn">Elena Rossi</button>
+  <!-- Children Selector -->
+  <div id="children-selector">
+    <% if (children && children.length > 0) { %>
+      <% children.forEach(function(child, idx) { %>
+        <button
+          class="name-btn <%= idx === 0 ? 'active' : '' %>"
+          data-child-id="<%= child.id %>"
+          type="button"
+        >
+          <%= child.name %>
+        </button>
+      <% }) %>
+    <% } else { %>
+      <p>No children added yet.</p>
+    <% } %>
+
+    <button
+      class="plus-btn"
+      id="addChildBtn"
+      title="Add child"
+      onclick="window.location.href='/dashboard/children'"
+      type="button"
+    >+</button>
+  </div>
+
+  <!-- Data Section -->
+  <div id="dataDiv">
+    <% if (firstChild) { %>
+      <div id="data-header">
+        <h2 class="childName" id="childName"><%= firstChild.name %></h2>
+      <span 
+        class="age-tag <%= 
+          firstChild.age < 13 ? 'age-child' : 
+          firstChild.age < 20 ? 'age-teen' : 
+          '' 
+        %>"
+        id="childAge">
+        <%= firstChild.age %> y/o
+      </span>
+
+      </div>
+      <div id="data-body">
+        <div class="data-section">
+  <h3>Interests</h3>
+  <% if (Array.isArray(firstChild.interests) && firstChild.interests.length) { %>
+    <div id="childInterests">
+      <% firstChild.interests.forEach(function(interest) { %>
+        <span class="interest-tag"><%= interest %></span>
+      <% }) %>
     </div>
-
-
-    <div id="dataDiv">
-
-        <!-- Name and age header -->
-        <div id="data-header">
-            <h2>Juliana Vance</h2>
-            <span class="age-tag"> 12 years old</span>
-        </div>
-        <!-- --- -->
-
-        <!-- data body -->
-        <div id="data-body">
-
-            <!-- Interest -->
-            <div class="data-section">
-                <h3>Interests</h3>
-                <p id="childInterests">Robotics, Digital Illustration, and competitive Swimming.</p>
-            </div>
-            <!-- --- -->
-
-            <!-- Events -->
-            <div class="data-section">
-                <h3>Upcoming Events</h3>
-                <ul class="event-list">
-                    <li>
-                        <span class="event-date">Jan 28</span>
-                        <span class="event-name">Regional Swim Meet</span>
-                    </li>
-                    <li>
-                        <span class="event-date">Feb 02</span>
-                        <span class="event-name">Science Fair Setup</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- --- -->
-
-        </div>
-        <!-- --- -->
-
-        <!-- data footer -->
-        <div id="data-footer">
-
-            <button class="calendar-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg"
-                    alt="Google Calendar" width="18">
-                Sync with Google Calendar
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div id="aiDiv">
-    </div>
+  <% } else { %>
+    <p id="childInterests">No interests listed.</p>
+  <% } %>
 </div>
+
+        <div class="data-section">
+          <h3>Upcoming Events</h3>
+          <ul class="event-list" id="eventList">
+            <% if (firstChild.events && firstChild.events.length > 0) { %>
+              <% firstChild.events.forEach(function(ev) { %>
+                <li>
+                  <!-- Google Calendar Button -->
+                  <a 
+                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=<%= encodeURIComponent(ev.name) %>&location=<%= encodeURIComponent(ev.location) %>&dates=<%= new Date(ev.time).toISOString().replace(/[-:]/g,'').split('.')[0] %>/<%= new Date(ev.time).toISOString().replace(/[-:]/g,'').split('.')[0] %>"
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <button class="calendar-btn">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg"
+                           alt="Google Calendar" width="18">
+                    </button>
+                  </a>
+                  <span class="event-date"><%= new Date(ev.time).toLocaleDateString() %></span>
+                  <span class="event-name"><%= ev.name %></span>
+                  <span class="event-place"><%= ev.location %></span>
+                </li>
+              <% }) %>
+            <% } else { %>
+              <li>No events yet</li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    <% } else { %>
+      <div id="data-header">
+        <h2 class="childName" id="childName">No child selected</h2>
+        <span class="age-tag" id="childAge"></span>
+      </div>
+      <div id="data-body">
+        <p>Add a child profile to see interests and events.</p>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Chat Section -->
+  <div id="aiDiv"></div>
+</div>
+
+<!-- Client script for interactivity -->
+<script src="/js/dash.js"></script>

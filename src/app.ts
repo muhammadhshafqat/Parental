@@ -34,7 +34,6 @@ app.use('/dashboard', dashRouter);
 import callbackRouter from "./routes/callbackRedirect";
 app.use('/callbackRedirect', callbackRouter);
 
-
 // ------------------------------------------------------- APP STARTUP   ----------------------
 app.listen(port, () => {
   return console.log(`Server: http://localhost:${port}`);

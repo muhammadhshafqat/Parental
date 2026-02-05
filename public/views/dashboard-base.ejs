@@ -2,63 +2,43 @@
 <html>
 
 <head>
-	<title>
-		<%= typeof title !=="undefined" ? title : "" %>
-	</title>
-	<link rel="stylesheet" href="/css/main.css">
-	<link rel="stylesheet" type="text/css" href="/css/dash.css" />
-	<%- defineContent('head') %>
-
+  <title>
+    <%= typeof title !== "undefined" ? title : "" %>
+  </title>
+  <link rel="stylesheet" href="/css/main.css">
+  <%- defineContent('head') %>
 </head>
 
 <body>
+  <header>
+    <h1>Parental</h1>
+    <div class="account-section">
+      <!-- Just a logout button -->
+      <button class="logout-btn" onclick="logout()">Log Out</button>
+    </div>
+  </header>
 
-	<script src="../js/accountBtn.js">
-	</script>
+  <div class="divider"></div>
 
-	<header>
-		
-		<h1>Parental</h1>
+  <div id="dashboard-container">
+    <%- body %>
+  </div>
 
-		<div class="account-section">
+  <script src="/js/dash.js"></script>
 
-		
-			<button class="account-btn" id="accountBtn" onclick="toggleDropdown(event)">
-				<div class="account-photo">U</div>
-				<span>Account</span>
-				<div class="dropdown-arrow"></div>
-			</button>
-
-			<div class="dropdown-menu" id="dropdownMenu" onmouseleave="closeMenu()">
-				<button class="dropdown-item" onclick="window.location.href='/account'">
-					<span>👤</span> <span>Account Photo</span>
-				</button>
-				<button class="dropdown-item" onclick="window.location.href='/settings'">
-					<span>⚙️</span> <span>Settings</span>
-				</button>
-				<button class="dropdown-item logout" onclick="logout()">
-					<span>🚪</span> <span>Log Out</span>
-				</button>
-			</div>
-		</div>
-
-	</header>
-
-	<div class="divider"></div>
-
-	<div id="dashboard-container">
-		<%- body %>
-	</div>
-
-	<footer>
-		<p>&copy; 2026 Hassan Square</p>
-	</footer>
-
-	<script src="/js/dash.js">
-		
-	</script>
-
-
+  <script>
+    // Simple logout function
+    function logout() {
+      // Example: clear session and redirect
+      fetch('/logout', { method: 'POST' })
+        .then(() => {
+          window.location.href = '/login';
+        })
+        .catch(err => {
+          console.error('Logout failed', err);
+        });
+    }
+  </script>
 </body>
 
 </html>
