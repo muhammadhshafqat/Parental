@@ -21,6 +21,10 @@
     background-color: var(--accent);
     color: var(--base);
 }
+.action-btn:hover{
+    background-color: var(--accent);
+    color: var(--base);
+}
 .auth-card h1 {
   font-family: 'NM-B', sans-serif;
   margin-bottom: 1rem;

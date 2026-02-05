@@ -134,7 +134,6 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
 }
 
 #data-header h2 {
@@ -224,6 +223,7 @@ header {
   border: 1px solid #ccc !important;
   color: black !important;
   transition: all 0.2s ease !important;
+  font-size: 1rem;
 }
 .age-tag:hover {
   transform: translateY(-2px);
