@@ -51,7 +51,7 @@ router.post('/register', async (req:Request, res:Response) => {
     if (error) {
         return res.render('register', {title: 'Register', error: error.message});
     }
-    res.redirect('/dashboard')
+    res.redirect('/dashboard/children')
 })
 
 

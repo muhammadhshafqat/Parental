@@ -6,6 +6,14 @@
 <div id="dashMainContainer">
   <!-- Children Selector -->
   <div id="children-selector">
+    
+    <button
+      class="plus-btn"
+      id="addChildBtn"
+      title="Add child"
+      onclick="window.location.href='/dashboard/children'"
+      type="button"
+    >+</button>
     <% if (children && children.length > 0) { %>
       <% children.forEach(function(child, idx) { %>
         <button
@@ -17,16 +25,7 @@
         </button>
       <% }) %>
     <% } else { %>
-      <p>No children added yet.</p>
     <% } %>
-
-    <button
-      class="plus-btn"
-      id="addChildBtn"
-      title="Add child"
-      onclick="window.location.href='/dashboard/children'"
-      type="button"
-    >+</button>
   </div>
 
   <!-- Data Section -->
