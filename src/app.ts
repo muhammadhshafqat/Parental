@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import expressLayouts from 'express-ejs-layouts';
+import cors from "cors";
 
 
 
@@ -15,6 +16,7 @@ app.set('views', path.join(__dirname, '../public/views'));
 app.use(expressLayouts); 
 app.use(express.static('public'));
 app.set('layout', 'base');
+app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 

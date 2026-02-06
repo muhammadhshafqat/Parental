@@ -1,4 +1,4 @@
-import {Router, Request, Response} from 'express';
+import {Router, Request, Response, NextFunction} from 'express';
 import { createClient } from '../utils/database/server-database';
 const router = Router();
 
@@ -30,7 +30,7 @@ router.post('/login', async (req: Request, res:Response) => {
     res.redirect('/dashboard');
 })
 
-router.post('/register', async (req:Request, res:Response) => {
+router.post('/register', async (req:Request, res:Response, next: NextFunction) => {
     const {email, password, cpassword, dob, name} = req.body;
     if (cpassword != password){
         return res.render('register', {title: "Register", error: "Passwords do not match"});
@@ -38,21 +38,32 @@ router.post('/register', async (req:Request, res:Response) => {
     
     const supabase = createClient({req, res});
 
-    const {data,error} = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            data: {
-                name,
-                dob,
+
+    const {data:authData,error: authError} = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    name,
+                    dob,
+                }
             }
-        }
-    })
-    if (error) {
-        return res.render('register', {title: 'Register', error: error.message});
+        });
+
+    if(authError){
+        return res.render("register", {title: "Register", error: authError.message});
     }
-    res.redirect('/dashboard')
-})
+
+    const {error: dbError} = await supabase.from("users").insert({email: email, dob: dob, name: name, id: authData.user.id});
+
+    if(dbError){
+        console.log("Could not create user profile:", dbError);
+        return next(dbError);
+
+    }
+
+    res.redirect('/dashboard');
+});
 
 
 export default router;

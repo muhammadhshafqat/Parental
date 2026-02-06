@@ -27,3 +27,19 @@ export type userRecord = {
 }
 
 export type tableNames = "Children" | "ChildrenEvents" | "Events" |  "users" | "UserChildren" ; 
+
+// -------------------------------------- General TYpes ------------- //
+declare global {
+  namespace Express {
+    interface Request {
+      user?: import("@supabase/supabase-js").User;
+    }
+  }
+};
+
+export type chatDbType = {
+
+    role: string,
+    message: string
+
+};

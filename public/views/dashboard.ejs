@@ -60,5 +60,25 @@
 
 
     <div id="aiDiv">
+        <% if (chatHistory) { %>
+            <div class="chat-container">
+                <% chatHistory.forEach(function(msg) { %>
+                
+                    <div class="message <%= msg.role === 'user' ? 'user-message' : 'model-message' %>">
+                        <div class="message-content">
+                            <%= msg.message %>
+                        
+                        </div>
+                    </div>
+                <% }); %>
+
+            </div>
+        <% } %>
+        <form method="post" action="<%= (chatId) ? `/dashboard/chat/${chatId}` : "/dashboard/chat/create" %>" >
+
+            <input type="text" name="prompt"/>
+            <button type="submit">-></button>
+        </form>
+
     </div>
 </div>

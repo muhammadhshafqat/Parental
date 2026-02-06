@@ -1,6 +1,5 @@
-import { GenerateContentParameters, GoogleGenAI, SafetySetting, HarmCategory, HarmBlockThreshold, Chat} from '@google/genai';
+import { Content, GoogleGenAI, SafetySetting, HarmCategory, HarmBlockThreshold, Chat, GenerateContentResponse} from '@google/genai';
 import ENV from "../../ENV/ENV";
-
 
 // --------------------------------------- AI CLIENT --------------------------
 const aiClient = new GoogleGenAI({apiKey:ENV.geminiKey});
@@ -14,37 +13,37 @@ const safetySettings:SafetySetting[] = [
 
 ];
 
-// creates a new chat and returns it
-async function createNewChat(): Promise<Chat>{
+// creates a new chat and returns it if created successfully else it returns null
+export async function createNewChat(history: Content[] | null): Promise<Chat | null>{
 
-    const chat:Chat = await aiClient.chats.create(
+    const currentChat = await aiClient.chats.create(
 
         {
             model: MODEL_ID,
             config: {
                 safetySettings: safetySettings,
                 systemInstruction: system_instruction
-            }
+            },
+            ...(history && {history}) 
         }
 
     );
+    
 
-    return chat;
+    if (currentChat){
+        return currentChat;
+    }else {
+        return null;
+    }
 
 }
 
 
-async function sendPromptToApi(prompt: string){
+export async function sendPromptToApi(prompt: string, chat: Chat): Promise<string>{
 
-    const response = aiClient.models.generateContent({
-        model: MODEL_ID,
-        config: {
-            systemInstruction: system_instruction,
-            safetySettings: safetySettings
-        },
-        contents: [{
-            role: "user",
-        }]
-    } as GenerateContentParameters);
+    const response: GenerateContentResponse = await chat.sendMessage({
+        message: prompt,
+    });
 
+    return response.data;
 }
