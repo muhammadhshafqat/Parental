@@ -76,8 +76,10 @@ dashRouter.use(requireAuth);
 // --------------------------------------------- ROUTE SPECIFIC FUNCTIONS ---------------------------------- //
 dashRouter.get('/', (req, res) => {
 
-    res.render('dashboard', { layout: 'dashboard-base', chatHistory: null, chatId: null 
-		
+    res.render('dashboard', { 
+		layout: 'dashboard-base',
+		chatHistory: null,
+		chatId: null,		
 	});
 
 });
@@ -106,7 +108,7 @@ dashRouter.post("/chat/create", async (req: Request, res: Response, next) =>{
 
 	}else {
 
-		res.render("dashboard", {layout: "dashboard-base", chatHistory: null, chatId: chatId})		
+		res.render("dashboard", {layout: "dashboard-base", chatHistory: null, chatId: chatId});
 
 	}
 

@@ -60,8 +60,11 @@
 
 
     <div id="aiDiv">
-        <% if (chatHistory) { %>
-            <div class="chat-container">
+
+        <div class="chat-container">
+
+            <% if (chatHistory) { %>
+            
                 <% chatHistory.forEach(function(msg) { %>
                 
                     <div class="message <%= msg.role === 'user' ? 'user-message' : 'model-message' %>">
@@ -72,11 +75,13 @@
                     </div>
                 <% }); %>
 
-            </div>
-        <% } %>
-        <form method="post" action="<%= (chatId) ? `/dashboard/chat/${chatId}` : "/dashboard/chat/create" %>" >
+                </div>
 
-            <input type="text" name="prompt"/>
+            <% } %>
+        
+        <form id="chat-form">
+
+            <input type="text" name="prompt" id="name-input"/>
             <button type="submit">-></button>
         </form>
 
