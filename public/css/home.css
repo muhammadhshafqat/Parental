@@ -141,7 +141,6 @@
 }
 
 
-/* CTA Section */
 .cta {
 	padding: 96px 32px;
 	background: linear-gradient(135deg, #fff 0%, #f3f2f1 100%);
@@ -168,7 +167,7 @@
 }
 
 .cta h2 {
-	font-size: clamp(32px, 4vw, 48px);
+	font-size: clamp(32px, 4vw, 38px);
 	font-weight: 700;
 	font-family: 'NM-B', sans-serif;
 	margin-bottom: 16px;
