@@ -64,7 +64,7 @@
   background: var(--base);
   border: 1px solid #e5e5ea;
   border-radius: var(--radius);
-  min-height: 64vh;
+  min-height: 68vh;
   box-shadow: var(--shadow);
 }
 

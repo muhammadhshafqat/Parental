@@ -45,6 +45,15 @@
 	background: #fff;
 }
 
+.features .section-container {
+	border: 5px dashed #ccc;
+	border-radius: var(--radi);
+	padding: 32px;
+}
+.features .section-title{
+	color: var(--accent);
+}
+
 .section-container {
 	max-width: 1200px;
 	margin: 0 auto;
@@ -103,6 +112,7 @@
 	width: 56px;
 	height: 56px;
 	background: #fafafa;
+	border: 1px solid #ccc;
 	border-radius: var(--radi);
 	display: flex;
 	align-items: center;
