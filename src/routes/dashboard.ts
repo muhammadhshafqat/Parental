@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction} from "express";
 import * as appTypes from "../utils/common";
 import { createClient } from "../utils/database/server-database";
-import { createNewChat, sendPromptToApi } from "../utils/ai/ai";
+import { createNewChat, sendPromptToChat} from "../utils/ai/ai";
 import { Chat, Content, Part } from "@google/genai";
 
 
@@ -85,81 +85,81 @@ dashRouter.get('/', (req, res) => {
 });
 
 
-dashRouter.post('/', (req, res)=>{
+// dashRouter.post('/', (req, res)=>{
 
-	res.send('what the flip');
+// 	res.send('what the flip');
 
 
-});
+// });
 
-dashRouter.post("/chat/create", async (req: Request, res: Response, next) =>{
+// dashRouter.post("/chat/create", async (req: Request, res: Response, next) =>{
 
-	const supabase = createClient({req,res});
-	const userId: string = req.user?.id;
+// 	const supabase = createClient({req,res});
+// 	const userId: string = req.user?.id;
 
-	//CREATE NEW ID
-	const  {data, error} = await supabase.from("Chats").insert({"user_id": userId}).select("id");
-	const chatId:string = data?.pop().id; 
-	if(error || !chatId){
+// 	//CREATE NEW ID
+// 	const  {data, error} = await supabase.from("Chats").insert({"user_id": userId}).select("id");
+// 	const chatId:string = data?.pop().id; 
+// 	if(error || !chatId){
 
-		console.log(error);
-		next(error);
-		return;
+// 		console.log(error);
+// 		next(error);
+// 		return;
 
-	}else {
+// 	}else {
 
-		res.render("dashboard", {layout: "dashboard-base", chatHistory: null, chatId: chatId});
+// 		res.render("dashboard", {layout: "dashboard-base", chatHistory: null, chatId: chatId});
 
-	}
+// 	}
 
-})
+// })
 
-dashRouter.post('/chat/:id', async (req, res, next) =>{
+// dashRouter.post('/chat/:id', async (req, res, next) =>{
 
-	try{
+// 	try{
 
-		const supabase = createClient({req, res});
+// 		const supabase = createClient({req, res});
 		
-		// getting user id for fetching the chat id
-		const userId: string = req.user?.id;
+// 		// getting user id for fetching the chat id
+// 		const userId: string = req.user?.id;
 		
-		// get the id
-		let chatId: string = req.params.id;
-		let temp: null | appTypes.chatDbType[] = null;
+// 		// get the id
+// 		let chatId: string = req.params.id;
+// 		let temp: null | appTypes.chatDbType[] = null;
 
-		let history: Content[] ;
+// 		let history: Content[] ;
 
 
-		const {data, error} = await supabase.from("Chats").select("messages").eq("id", chatId);
-		const messages = data?.pop().messages;
+// 		const {data, error} = await supabase.from("Chats").select("messages").eq("id", chatId);
+// 		const messages = data?.pop().messages;
 
-		if(error || !messages){
-			history = null;
+// 		if(error || !messages){
+// 			history = null;
 
-		}else {
-			temp = messages;
-			history = convertToParts(temp);
-		}
+// 		}else {
+// 			temp = messages;
+// 			history = convertToParts(temp);
+// 		}
 
-		// sending prompt and recieving response
-		const prompt: string = req.body.prompt;
-		temp.push({role: "user", message: prompt});
+// 		// sending prompt and recieving response
+// 		const prompt: string = req.body.prompt;
+// 		temp.push({role: "user", message: prompt});
 
-		const chat = await createNewChat(history);
+// 		const chat = await createNewChat(history);
 
-		const response:string = await sendPromptToApi(prompt, chat);
-		temp.push({role: "model", message: response});
+// 		const response:string = await sendPromptToApi(prompt, chat);
+// 		temp.push({role: "model", message: response});
 
-		res.render("dashboard", {layout: "dashboard-base", chatHistory: temp, chatId: chatId});
+// 		res.render("dashboard", {layout: "dashboard-base", chatHistory: temp, chatId: chatId});
 
-	}catch(err){
-		console.error("Error: ", err);
-		next(err);
-	}
+// 	}catch(err){
+// 		console.error("Error: ", err);
+// 		next(err);
+// 	}
 
 	
 
-});
+// });
 
 
 // // insert new prompt into chat
