@@ -30,7 +30,7 @@
 				</h2>
 				<span class="age-tag <%= 
           firstChild.age < 13 ? 'age-child' : 
-          firstChild.age < 20 ? 'age-teen' : 
+          firstChild.age <= 20 ? 'age-teen' : 
           '' 
         %>" id="childAge">
 					<%= firstChild.age %> y/o

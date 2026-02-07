@@ -108,3 +108,14 @@ input {
 .back-nav-btn:hover{
   text-decoration: underline;
 }
+
+.form-group input.touched:invalid {
+  border: 2px dashed #9a0c0c;
+}
+
+.error-message {
+  color: #b81010;
+  padding: 4px 0 0 12px; /* top right bottom left */
+  font-size: 0.85em;
+  display: none;
+}

@@ -283,13 +283,11 @@ h3 svg {
 .age-child {
 	color: #0c609a !important;
 	background-color: #e7f3fe !important;
-	/* blue for children */
 }
 
 .age-teen {
 	color: #218838 !important;
 	background-color: #e7f7e9 !important;
-	/* red for teens */
 }
 
 .interest-tag {

@@ -47,6 +47,8 @@
 .features {
 	padding: 96px 32px;
 	background: #fff;
+		padding-bottom: 0px;
+
 }
 
 .features .section-container {
@@ -54,7 +56,7 @@
 	border-radius: var(--radi);
 	padding: 40px;
 }
-.features .section-title{
+.section-title{
 	color: var(--accent);
 }
 .hero-heading {
@@ -159,4 +161,89 @@
 	color: var(--text-secondary);
 	font-size: 16px;
 	line-height: 1.6;
+}
+
+
+/* Instructors Section */
+.instructors {
+	padding: 96px 32px;
+	background: #fff;
+}
+.instructors-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 32px;	border: 5px dashed #ccc;
+	border-radius: var(--radi);
+	padding: 40px;
+
+
+}
+
+.instructor-card {
+	text-align: center;
+}
+
+.instructor-image {
+	width: 160px;
+	height: 160px;
+	border-radius: var(--radi);
+	margin: 0 auto 24px;
+	border: 2px solid #ccc;
+	transition: all 0.2s ease;
+	overflow: hidden;
+}
+
+.instructor-image img {
+	width: 64%;
+	height: 64%;
+	margin: 24px;
+	object-fit: cover;
+}
+
+.instructor-card:hover .instructor-image {
+	border: 4px solid var(--accent);
+	box-shadow: 0 0 20px rgba(220, 121, 77, 0.3);
+}
+.instructor-card:hover .instructor-image-g {
+	border: 4px solid #218838;
+	box-shadow: 0 0 20px rgba(33, 136, 56, 0.3);
+}
+.instructor-card:hover .instructor-image-b {
+	border: 4px solid #0c609a;
+	box-shadow: 0 0 20px rgba(12, 96, 154, 0.3);
+}
+.instructor-card:hover .instructor-image-f {
+	border: 4px solid #9a0c0c;
+	box-shadow: 0 0 20px rgba(154, 12, 12, 0.3);
+}
+.instructor-name {
+	display: block;
+	text-align: left;
+	margin: 0 auto;
+	width: 80%;
+	font-size: 18px;
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+
+.instructor-role {
+	display: block;
+	text-align: left;
+	margin: 0 auto;
+	width: 80%;
+
+	color: #111;
+	font-size: 14px;
+	font-weight: 500;
+	font-family: 'NM-M', sans-serif;
+	margin-bottom: 8px;
+}
+
+.instructor-bio {
+	display: block;
+	color: var(--text-secondary);
+	width: 80%;
+	font-size: 14px;
+	text-align: left;
+	margin: 0 auto;
 }
