@@ -166,6 +166,7 @@ dashRouter.get("/", async (req: Request, res: Response) => {
       children,
       firstChild: children.length > 0 ? children[0] : null,
       user: userRow, // <-- now has .name from your users table
+      chatHistory: null
     });
   } catch (err) {
     console.error("Dashboard route error:", err);

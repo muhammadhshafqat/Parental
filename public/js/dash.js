@@ -101,6 +101,14 @@ function sendPrompt() {
 // const supabase = getSupabase();
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  connectToServer();
+  const form = document.querySelector("#chat-form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    sendPrompt()
+  });
+
   const childButtons = document.querySelectorAll(".name-btn");
   const childNameEl = document.getElementById("childName");
   const childAgeEl = document.getElementById("childAge");
