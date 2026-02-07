@@ -1,6 +1,8 @@
 import{ WebSocketServer }from "ws";
 import { Chat } from "@google/genai";
 import { createNewChat, sendPromptToChat } from "../ai/ai";
+import { marked } from "marked";
+import * as DOMPurify from "dompurify";
 import  {chatDbType} from  "../common";
 
 
@@ -35,7 +37,11 @@ wss.on("connection", async (ws, request)=>{
         try{
 
             const response = await chat.sendMessage({message: prompt});
-            const data:chatDbType = {role: "model", message: response.text.toString()}; 
+            
+            const raw =  response.text;
+            const html = marked.parse(raw) as string;
+            
+            const data:chatDbType = {role: "model", message: html}; 
             ws.send(JSON.stringify(data));
 
         }catch(err){

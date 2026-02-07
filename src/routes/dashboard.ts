@@ -1,9 +1,7 @@
 import { Router, Request, Response, NextFunction} from "express";
 import * as appTypes from "../utils/common";
 import { createClient } from "../utils/database/server-database";
-import { createNewChat, sendPromptToChat} from "../utils/ai/ai";
 import { Chat, Content, Part } from "@google/genai";
-
 
 
 const dashRouter: Router = Router();

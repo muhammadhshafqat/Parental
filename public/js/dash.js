@@ -11,7 +11,7 @@ function insertMessage(role, message) {
 
     const messageContent = document.createElement("div");
     messageContent.classList.add("message-content");
-    messageContent.textContent = message;
+    messageContent.innerHTML = message;
     div.appendChild(messageContent);
 
     parent.appendChild(div);

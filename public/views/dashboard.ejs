@@ -1,5 +1,5 @@
 <script>
-	window.childrenData = <% - JSON.stringify(children || []).replace(/</g, '\\u003c') %>;
+	window.childrenData = <%- JSON.stringify(children || []).replace(/</g, '\\u003c') %>;
 </script>
 <h1 class="into-heading">
 	<%= user.name %>'s Parenting Assistant
