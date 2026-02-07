@@ -13,7 +13,7 @@
 }
 .hero-buttons {
 	display: flex;
-	gap: 16px;
+	gap: 24px;
 	margin-top: 24px;
 	margin-bottom: 46px;
 	justify-content: center;
@@ -121,10 +121,12 @@
 	padding: 32px;
 	transition: all 0.3s;
 }
-
+.card-v {
+		border-color: var(--accent);
+}
 .feature-card:hover {
 	border-color: var(--accent);
-	transform: translateY(-4px);
+	transform: translateY(-8px);
 }
 
 .feature-icon {
@@ -158,48 +160,3 @@
 	font-size: 16px;
 	line-height: 1.6;
 }
-
-
-.cta {
-	padding: 96px 32px;
-	background: linear-gradient(135deg, #fff 0%, #f3f2f1 100%);
-	text-align: center;
-	position: relative;
-	overflow: hidden;
-}
-
-.cta::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 600px;
-	height: 600px;
-	background: radial-gradient(circle, rgba(220, 121, 77, 0.1) 0%, transparent 70%);
-	pointer-events: none;
-}
-
-.cta-content {
-	position: relative;
-	z-index: 1;
-}
-
-.cta h2 {
-	font-size: clamp(32px, 4vw, 38px);
-	font-weight: 700;
-	font-family: 'NM-B', sans-serif;
-	margin-bottom: 16px;
-}
-
-.cta p {
-	color: var(--text-secondary);
-	font-size: 18px;
-	margin-bottom: 32px;
-	max-width: 500px;
-	margin-left: auto;
-	margin-right: auto;
-	line-height: 1.7;
-}
-
-

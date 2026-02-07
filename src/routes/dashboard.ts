@@ -1,9 +1,7 @@
 import { Router, Request, Response, NextFunction} from "express";
 import * as appTypes from "../utils/common";
 import { createClient } from "../utils/database/server-database";
-import { createNewChat, sendPromptToChat} from "../utils/ai/ai";
 import { Chat, Content, Part } from "@google/genai";
-
 
 
 const dashRouter: Router = Router();
@@ -166,6 +164,7 @@ dashRouter.get("/", async (req: Request, res: Response) => {
       children,
       firstChild: children.length > 0 ? children[0] : null,
       user: userRow, // <-- now has .name from your users table
+      chatHistory: null
     });
   } catch (err) {
     console.error("Dashboard route error:", err);

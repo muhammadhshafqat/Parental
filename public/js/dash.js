@@ -11,7 +11,7 @@ function insertMessage(role, message) {
 
     const messageContent = document.createElement("div");
     messageContent.classList.add("message-content");
-    messageContent.textContent = message;
+    messageContent.innerHTML = message;
     div.appendChild(messageContent);
 
     parent.appendChild(div);
@@ -101,6 +101,14 @@ function sendPrompt() {
 // const supabase = getSupabase();
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  connectToServer();
+  const form = document.querySelector("#chat-form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    sendPrompt()
+  });
+
   const childButtons = document.querySelectorAll(".name-btn");
   const childNameEl = document.getElementById("childName");
   const childAgeEl = document.getElementById("childAge");
