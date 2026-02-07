@@ -13,7 +13,7 @@
 			type="button">+</button>
 		<% if (children && children.length> 0) { %>
 			<% children.forEach(function(child, idx) { %>
-				<button class="name-btn <%= idx === 0 ? 'active' : '' %>" data-child-id="<%= child.id %>" type="button">
+				<button class="name-btn <%= idx === 0 ? 'active' : '' %>" data-child-id="<%= child.id %>" type="button" data-chat-id = "<%=child.chatId %>">
 					<%= child.name %>
 				</button>
 				<% }) %>
@@ -116,18 +116,7 @@
 	<div id="aiDiv">
 		<div class="invisible-spacing"></div>
 		<div class="chat-container">
-			
-			<% if (chatHistory) { %>
-				<% chatHistory.forEach(function(msg) { %>
-
-					<div class="message <%= msg.role === 'user' ? 'user-message' : 'model-message' %>">
-						<div class="message-content">
-							<%= msg.message %>
-
-						</div>
-					</div>
-				<% }); %>
-		    <% } %>
+		
 		</div>
 
 		<form id="chat-form">

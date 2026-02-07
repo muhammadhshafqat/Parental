@@ -2,10 +2,10 @@ import { Content, GoogleGenAI, SafetySetting, HarmCategory, HarmBlockThreshold, 
 import ENV from "../../ENV/ENV";
 
 // --------------------------------------- AI CLIENT --------------------------
-const aiClient = new GoogleGenAI({apiKey:ENV.geminiKey});
+const aiClient = new GoogleGenAI({apiKey:ENV.altGeminiKey});
 const MODEL_ID = "gemini-2.5-flash";
 
-const system_instruction:string  = "You are an expert on child education. Use formal language.";
+const system_instruction:string  = "You are an expert on child education. Use formal language. You cannot generate images or sounds or video. You always provide information present in or backed by reputable sources.";
 const safetySettings:SafetySetting[] = [
     {category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE},
     {category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE},
