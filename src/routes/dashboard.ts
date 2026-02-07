@@ -1,23 +1,73 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router, Request, Response, NextFunction} from "express";
+import * as appTypes from "../utils/common";
 import { createClient } from "../utils/database/server-database";
+import { createNewChat, sendPromptToChat} from "../utils/ai/ai";
+import { Chat, Content, Part } from "@google/genai";
+
+
 
 const dashRouter: Router = Router();
 
-// Middleware to require authentication
-async function requireAuth(req: Request, res: Response, next: NextFunction) {
-  try {
-    const supabase = createClient({ req, res });
-    const { data, error } = await supabase.auth.getUser();
+// ----------------------------------- FUNCTIONS ------------------------------ //
 
-    if (error || !data?.user) {
-      return res.redirect("/login");
-    }
-    next();
-  } catch (err) {
-    console.error("Auth middleware error:", err);
-    return res.redirect("/login");
-  }
+async function requireAuth(req: Request, res: Response, next: NextFunction):Promise<void> {
+
+	const supabase = createClient({req, res});
+
+	const {data, error} = await supabase.auth.getUser();
+
+	if(error || !data?.user){
+
+		res.redirect('/login');
+		return;
+
+	}else{
+
+		req.user = data.user;
+		next();
+
+	}
+
 }
+
+// creates a new chat in the db
+async function createAndSaveChatDB(req: Request, res: Response): Promise<void | string>{
+
+	// get user id
+	const userId: string = req.user?.id;
+		
+	const supabase = createClient({req, res});
+
+	// insert into chats table
+	const {data, error} = await supabase.from("Chats").insert({user_id: userId}).select("id");
+
+
+	// could not create chat in database
+	if(error || data[0].id){
+		throw new Error("Could not create chat");
+	}
+	const chatId = data?.pop().id;
+	return chatId;	
+}
+
+//converting from my type to parts
+function convertToParts(arr: {role: string, message: string}[]): Content[]{
+
+
+	const parts:Content[] = [];
+
+	arr.forEach((el) => {
+
+		const partArr: Part[] = [{text:el.message}];
+
+		const obj:Content = {role: el.role, parts: partArr};
+
+		parts.push(obj);
+	});
+
+	return parts;
+} 
+
 
 dashRouter.use(requireAuth);
 
