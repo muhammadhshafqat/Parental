@@ -8,7 +8,6 @@ const ENV = {
     geminiKey: process.env.GEMINI_API_KEY || '',
     port: process.env.PORT || 3000,
     altGeminiKey: process.env.OTHER_GEMINI_API_KEY || ''
-
 }
 
 if (!ENV.geminiKey || !ENV.altGeminiKey || !ENV.supabaseKey || !ENV.supabasePublishableKey || !ENV.supabaseUrl){
