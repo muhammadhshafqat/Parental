@@ -105,8 +105,34 @@ Upcoming Events</h3>
     <% } %>
   </div>
 
-  <!-- Chat Section -->
-  <div id="aiDiv"></div>
+
+    <div id="aiDiv">
+
+        <div class="chat-container">
+
+            <% if (chatHistory) { %>
+            
+                <% chatHistory.forEach(function(msg) { %>
+                
+                    <div class="message <%= msg.role === 'user' ? 'user-message' : 'model-message' %>">
+                        <div class="message-content">
+                            <%= msg.message %>
+                        
+                        </div>
+                    </div>
+                <% }); %>
+
+                </div>
+
+            <% } %>
+        
+        <form id="chat-form">
+
+            <input type="text" name="prompt" id="name-input"/>
+            <button type="submit">-></button>
+        </form>
+
+    </div>
 </div>
 
 <!-- Client script for interactivity -->

@@ -12,7 +12,7 @@ body {
 }
 
 * {
-  font-family: 'NM-R', sans-serif;
+  font-family: 'NM-M', sans-serif;
   box-sizing: border-box;
 }
 
@@ -71,6 +71,11 @@ input {
   border: 1px solid #ccc;
   font-size: 1rem;
   font-family: 'NM-R';
+}
+
+::selection {
+  background: var(--accent); /* Change the background highlight color */
+  color: var(--base);      /* Change the text color */
 }
 
 ::selection {

@@ -21,8 +21,10 @@
   "homepage": "https://github.com/muhammadhshafqat/Parental#readme",
   "devDependencies": {
     "@types/cookie": "^0.6.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/express-ejs-layouts": "^2.5.4",
+    "@types/ws": "^8.18.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
@@ -31,11 +33,13 @@
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.90.1",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
     "express-ejs-layouts": "^2.5.1",
     "install": "^0.13.0",
-    "npm": "^11.7.0"
+    "npm": "^11.7.0",
+    "ws": "^8.19.0"
   }
 }
