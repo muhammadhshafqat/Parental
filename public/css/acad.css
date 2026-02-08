@@ -1,7 +1,7 @@
 @import url(root.css);
 
 .acad-card {
-  padding: 16px;
+  padding: 4px;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -66,8 +66,8 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
+  accent-color: var(--accent); /* modern browsers */
 }
-
 .item-text {
   flex-grow: 1;
   border: 1px solid #ccc;
@@ -76,21 +76,24 @@
   font-size: 0.95rem;
   font-family: 'NM-R', sans-serif;
 }
-
+.item-text:focus {
+	border-color: var(--accent);
+}
 .remove-item {
   border-radius: 10px;
-  padding: 6px 12px;
+  padding: 8px 8px 6px 8px;
+  justify-content: center; /* centers horizontally */ align-items: center; /* centers vertically */
   border: 1px solid #ccc;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
+  color: #9a0c0c;
   transition: background 0.2s ease, color 0.2s ease;
 }
 .remove-item svg{
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   stroke: currentColor;
 }
-
 .remove-item:hover {
   background-color: #9a0c0c;
   color: var(--base);

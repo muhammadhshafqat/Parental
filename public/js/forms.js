@@ -106,8 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Legacy age field validation (if still present)
     if (id === "age") {
       const age = parseInt(value, 10);
-      if (isNaN(age) || age < 3 || age > 20) {
-        showError(field, "Age must be between 3 and 20.");
+      if (isNaN(age) || age < 3 || age > 19) {
+        showError(field, "Age must be between 3 and 19.");
         return false;
       } else {
         clearError(field);
