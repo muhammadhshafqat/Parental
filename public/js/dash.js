@@ -126,9 +126,9 @@ function connectToServer() {
 
 	});
 
-	socket.addEventListener("events", (data)=>{
+	socket.addEventListener("events", (res)=>{
 
-		const data = data.filtered;
+		const data = res.filtered;
 
 		// for each and shit
 
