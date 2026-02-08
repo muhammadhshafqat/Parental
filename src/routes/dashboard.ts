@@ -221,78 +221,94 @@ dashRouter.get("/children", (req: Request, res: Response) => {
 
 // Handle child creation form submission
 dashRouter.post("/children/add", async (req: Request, res: Response) => {
-	const supabase = createClient({ req, res });
+  const supabase = createClient({ req, res });
 
-	try {
-		const { data: userData, error: userErr } = await supabase.auth.getUser();
-		if (userErr || !userData?.user?.id) {
-			console.error("No authenticated user:", userErr);
-			return res.status(401).redirect("/login");
-		}
-		const userId = userData.user.id;
-		const userEmail = userData.user.email ?? null;
-		const userName =
-			userData.user.user_metadata?.full_name ??
-			userData.user.user_metadata?.name ??
-			null;
+  try {
+    const { data: userData, error: userErr } = await supabase.auth.getUser();
+    if (userErr || !userData?.user?.id) {
+      console.error("No authenticated user:", userErr);
+      return res.status(401).redirect("/login");
+    }
+    const userId = userData.user.id;
+    const userEmail = userData.user.email ?? null;
+    const userName =
+      userData.user.user_metadata?.full_name ??
+      userData.user.user_metadata?.name ??
+      null;
 
-		const { data: upsertUser, error: upsertErr } = await supabase
-			.from("users")
-			.upsert({ id: userId, email: userEmail, name: userName }, { onConflict: "id" })
-			.select()
-			.single();
+    // Ensure a users row exists (upsert)
+    const { data: upsertUser, error: upsertErr } = await supabase
+      .from("users")
+      .upsert({ id: userId, email: userEmail, name: userName }, { onConflict: "id" })
+      .select()
+      .single();
 
-		if (upsertErr) {
-			console.error("Upsert users row failed:", upsertErr);
-			return res
-				.status(500)
-				.send("Server error creating user record. Check RLS/policies and that the request is authenticated.");
-		}
+    if (upsertErr) {
+      console.error("Upsert users row failed:", upsertErr);
+      return res
+        .status(500)
+        .send("Server error creating user record. Check RLS/policies and that the request is authenticated.");
+    }
 
-		const { name, age, interests } = req.body;
-		if (!name || !age) {
-			return res.status(400).send("Name and age are required");
-		}
+    // Read form fields (expecting dob instead of age)
+    const { name, dob, interests } = req.body;
 
-		const interestsArray = interests
-			? interests.split(",").map((i: string) => i.trim())
-			: [];
+    // Basic validation
+    if (!name || !dob) {
+      return res.status(400).send("Name and date of birth are required");
+    }
 
-		const { data: child, error: insertErr } = await supabase
-			.from("Children")
-			.insert([{ name, age: parseInt(age, 10), interests: interestsArray }])
-			.select()
-			.single();
+    // Parse and validate DOB
+    const parsedDob = new Date(dob);
+    if (isNaN(parsedDob.getTime())) {
+      return res.status(400).send("Invalid date of birth format");
+    }
+    const today = new Date();
+    if (parsedDob > today) {
+      return res.status(400).send("Date of birth cannot be in the future");
+    }
 
-		if (insertErr || !child?.id) {
-			console.error("Error inserting child:", insertErr);
-			return res.status(500).send("Error creating child");
-		}
+	const interestsArray = interests
+      ? interests.split(",").map((i: string) => i.trim()).filter(Boolean)
+      : [];
 
-		const { data: linkData, error: linkErr } = await supabase
-			.from("UserChildren")
-			.insert([{ user_id: userId, child_id: child.id }])
-			.select()
-			.single();
+    // Insert child row with dob (DB should compute age if you added generated column)
+    const { data: child, error: insertErr } = await supabase
+      .from("Children")
+      .insert([{ name, dob: parsedDob.toISOString().slice(0, 10), interests: interestsArray }])
+      .select()
+      .single();
 
-		if (linkErr) {
-			console.error("Error linking child to user:", linkErr);
-			try {
-				await supabase.from("Children").delete().eq("id", child.id);
-				console.debug("Rolled back child insert due to link failure.");
-			} catch (delErr) {
-				console.error("Failed to rollback child insert:", delErr);
-			}
-			return res
-				.status(500)
-				.send("Error linking child to user. Check that a users row exists and RLS/policies allow this operation.");
-		}
+    if (insertErr || !child?.id) {
+      console.error("Error inserting child:", insertErr);
+      return res.status(500).send("Error creating child");
+    }
 
-		return res.redirect("/dashboard");
-	} catch (err) {
-		console.error("Unexpected error in /children/add:", err);
-		return res.status(500).send("Internal Server Error");
-	}
+    // Link child to user
+    const { data: linkData, error: linkErr } = await supabase
+      .from("UserChildren")
+      .insert([{ user_id: userId, child_id: child.id }])
+      .select()
+      .single();
+
+    if (linkErr) {
+      console.error("Error linking child to user:", linkErr);
+      // Attempt rollback of child insert
+      try {
+        await supabase.from("Children").delete().eq("id", child.id);
+        console.debug("Rolled back child insert due to link failure.");
+      } catch (delErr) {
+        console.error("Failed to rollback child insert:", delErr);
+      }
+      return res
+        .status(500)
+        .send("Error linking child to user. Check that a users row exists and RLS/policies allow this operation.");
+    }
+
+    return res.redirect("/dashboard");
+  } catch (err) {
+    console.error("Unexpected error in /children/add:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
-
 export default dashRouter;

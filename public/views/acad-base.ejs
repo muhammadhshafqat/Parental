@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= typeof title !== "undefined" ? title : "Academics Dashboard" %></title>
+  <link rel="stylesheet" href="/css/main.css">
+  <%- defineContent('head') %>
+</head>
+
+<body>
+  <header>
+    <a href="/"><h1>Parental App</h1></a>
+    <div class="account-section">
+      <button class="logout-btn" onclick="logout()">Log Out</button>
+    </div>
+  </header>
+
+
+  <main id="dashboard-container">
+    <%- body %>
+  </main>
+
+  <script src="/js/dash.js"></script>
+  <script>
+    function logout() {
+      fetch('/logout', { method: 'POST' })
+        .then(() => window.location.href = '/login')
+        .catch(err => console.error('Logout failed', err));
+    }
+  </script>
+</body>
+</html>
