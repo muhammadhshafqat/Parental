@@ -414,6 +414,17 @@ h3 svg {
   color: #111;
   border-color: #ccc;
 }
+.event-btn-submit {
+  background: transparent !important;
+  color: #111 !important;
+  border-color: #ccc !important;
+}
+.event-btn-submit:hover {
+  background: #0c609a !important;
+  color: #fff !important;
+  border-color: #0c609a !important;
+}
+
 .chat-container::-webkit-scrollbar {
   width: 8px;
 }
