@@ -143,7 +143,7 @@
 }
 
 .submit-btn:hover:not(:disabled) {
-    background: var(--accent);
+    background: rgb(12, 96, 154) !important;;
     color: #f1f1f1;
 }
 
@@ -178,7 +178,7 @@
 }
 
 .back-to-search-btn:hover {
-    background: var(--accent);
+    background: rgb(12, 96, 154) !important;;
     color: #fff;
 }
 .events-header h3 {
@@ -259,7 +259,7 @@
     display: inline-block;
     margin-top: 8px;
     padding: 4px 12px;
-    background: #2196F3;
+    background: rgb(12, 96, 154) !important;;
     color: var(--base, white);
     text-decoration: none;
     border-radius: 8px;
@@ -269,7 +269,8 @@
 }
 
 .event-link-btn:hover {
-    background: #0b7dda;
+    background: rgb(8, 59, 95) !important;
+;
 }
 
 /* ============================================
@@ -277,7 +278,7 @@
    ============================================ */
 .save-event-btn {
     padding: 10px 20px;
-    background: var(--accent);
+    background: rgb(12, 96, 154) !important;
     color: var(--base, white);
     border: 1px solid #ccc;
     border-radius: var(--radi, 8px);
@@ -291,9 +292,9 @@
 }
 
 .save-event-btn:hover:not(:disabled) {
-    background: transparent;
-    border: 1px solid #ccc;
-    color: var(--accent);
+    background: transparent !important;
+    border: 1px solid rgb(12, 96, 154) !important;
+    color: rgb(12, 96, 154) !important;
 }
 
 .save-event-btn:disabled {
@@ -303,16 +304,15 @@
 }
 
 .save-event-btn.saved {
-    background: var(--accent, #4CAF50) !important;
+    background: var(--accent);;
+    color: #f1f1f1;
     cursor: default;
     animation: pop 0.25s ease;
 }
-
 @keyframes pop {
     50% { transform: scale(0.9); }
     100% { transform: scale(1); }
 }
-
 /* ============================================
    EVENTS ACTIONS (Save All)
    ============================================ */
@@ -328,8 +328,8 @@
 .save-all-events-btn {
     padding: 14px 40px;
     background: transparent;
-    color: var(--accent);
-    border: 1px solid var(--accent);
+    color: rgb(12, 96, 154) !important;;
+    border: 1px solid rgb(12, 96, 154) !important;;
     border-radius: var(--radi);
     cursor: pointer;
     font-size: 1rem;
@@ -340,9 +340,9 @@
 }
 
 .save-all-events-btn:hover {
-    background: var(--accent);
-    color: #fff;
-    border: 1px solid var(--accent);
+    background: rgb(12, 96, 154) !important;;
+    color: #fff !important;
+    border: 1px solid rgb(12, 96, 154) !important;;
 }
 
 /* ============================================
