@@ -124,6 +124,7 @@ Upcoming Events</h3>
 		</form>
 	</div>
 </div>
+<div id="searchResults" class="search-results-container" style="display: none;"></div>
 
 <!-- Client script for interactivity -->
 <script src="/js/dash.js"></script>
@@ -153,4 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+</script>
+<script>
+    window.childrenData = <%- JSON.stringify(children) %>;
+    window.popularCities = <%- JSON.stringify(popularCities) %>;
 </script>

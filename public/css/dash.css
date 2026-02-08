@@ -209,7 +209,7 @@
 }
 
 .data-section {
-	margin-bottom: 32px;
+	margin-bottom: 0px;
 }
 
 .data-section h3 {
@@ -230,21 +230,24 @@ h3 svg {
 }
 
 .event-list {
-	list-style: none;
-	padding: 0;
+  list-style: none;
+  padding: 0;
+  max-height: 240px; /* adjust height as needed */
+  overflow-y: auto;  /* enables vertical scrolling */
 }
 
 .event-list li {
-	display: flex;
-	gap: 15px;
-	padding: 10px 0;
-	border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-200);
 }
 
 .event-date {
-	font-weight: bold;
-	color: var(--accent);
-	min-width: 60px;
+  font-weight: bold;
+  color: var(--accent);
+  min-width: 60px;
 }
 
 /* =========================================================================
