@@ -8,6 +8,7 @@ function renderChatHistory(history) {
         history.forEach(msg => insertMessage(msg.role, msg.message));
     }
 }
+
 function insertMessage(role, message) {
 
 	const parent = document.querySelector(".chat-container");
@@ -44,7 +45,17 @@ function connectToServer() {
 			// Parse the JSON data from the WebSocket message
 			const data = JSON.parse(event.data);
 			const { role, message } = data;
+
+
+
 			insertMessage(role, message);
+
+			const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
+        	if (activeChild) {
+            	if (!activeChild.chatHistory) activeChild.chatHistory = [];
+            	activeChild.chatHistory.push({ role, message });
+        	}
+
 		} catch (error) {
 			// If it's not JSON, treat it as plain text
 			console.error("Error parsing message:", error);
@@ -67,7 +78,16 @@ const sendOnOpen = (prompt) => {
 	const input = document.querySelector("#name-input");
 	if (currentChatId) {
 		socket.send(JSON.stringify({ role: "user", message: prompt, chatId: currentChatId }));
+
+
 		insertMessage("user", prompt);
+
+		const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
+        if (activeChild) {
+            if (!activeChild.chatHistory) activeChild.chatHistory = [];
+            activeChild.chatHistory.push({ role: "user", message: prompt });
+        }
+
 		input.value = ''; // Clear input after sending
 	} else {
 		insertMessage("user", prompt);
@@ -123,6 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Children data injected from server into a global variable
 	// In dashboard.ejs, add: <script>window.childrenData = <%- JSON.stringify(children) %></script>
 	const childrenData = window.childrenData || [];
+
+	children = childrenData;
 
 	// current chat id default
 	if (childrenData) {
@@ -211,6 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				eventListEl.appendChild(li);
 			}
 
+			// render's the chat history releavant to the child
 			renderChatHistory(child.chatHistory);
 
 		});
