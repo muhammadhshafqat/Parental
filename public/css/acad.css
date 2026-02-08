@@ -66,8 +66,23 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
-  accent-color: var(--accent); /* modern browsers */
+  accent-color: var(--accent);
+  border-radius: 6px; 
+  transition: transform 0.3s ease, accent-color 0.3s ease;
 }
+
+/* Animate when checked */
+.item-checked:checked {
+  transform: scale(1.2); 
+  accent-color: var(--accent);
+  animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1.2); }
+}
+
 .item-text {
   flex-grow: 1;
   border: 1px solid #ccc;

@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Mark touched on blur and validate
     field.addEventListener("blur", () => {
-      field.classList.add("touched");
       validateField(field);
     });
 
@@ -42,27 +41,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const today = new Date().toISOString().split("T")[0];
     dobField.setAttribute("max", today);
   }
-
-  function showError(field, message) {
-    if (!field || !field.parentNode) return;
-    const error = field.parentNode.querySelector(".error-message");
-    if (error) {
-      error.textContent = message;
-      error.style.display = "block";
-    }
-    field.classList.add("touched");
-    field.setAttribute("aria-invalid", "true");
+function showError(field, message) {
+  if (!field || !field.parentNode) return;
+  const error = field.parentNode.querySelector(".error-message");
+  if (error) {
+    error.textContent = message;
+    error.style.display = "block";
   }
+  field.classList.add("touched");
+  field.classList.add("error");   // NEW: add error class
+  field.setAttribute("aria-invalid", "true");
+}
 
-  function clearError(field) {
-    if (!field || !field.parentNode) return;
-    const error = field.parentNode.querySelector(".error-message");
-    if (error) {
-      error.textContent = "";
-      error.style.display = "none";
-    }
-    field.removeAttribute("aria-invalid");
+function clearError(field) {
+  if (!field || !field.parentNode) return;
+  const error = field.parentNode.querySelector(".error-message");
+  if (error) {
+    error.textContent = "";
+    error.style.display = "none";
   }
+  field.removeAttribute("aria-invalid");
+  field.classList.remove("error"); // NEW: remove error class
+}
 
   function validateField(field) {
     if (!field) return;
@@ -71,16 +71,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Name validation
     if (id === "name") {
-      if (value.length < 3 || value.length > 50) {
-        showError(field, "Name must be between 3 and 50 characters.");
-        return false;
+      if (form.id === "childForm") {
+        // Child form: stricter rule (max 20 chars)
+        if (value.length < 3 || value.length > 20) {
+          showError(field, "Child name must be between 3 and 20 characters.");
+          return false;
+        }
       } else {
-        clearError(field);
-        return true;
+        // Other forms: allow up to 50 chars
+        if (value.length < 3 || value.length > 50) {
+          showError(field, "Name must be between 3 and 50 characters.");
+          return false;
+        }
       }
+      clearError(field);
+      return true;
     }
 
-    // DOB validation (replaces age)
+    // DOB validation (only for child form)
     if (id === "dob") {
       if (!value) {
         showError(field, "Please select the date of birth.");
@@ -96,9 +104,21 @@ document.addEventListener("DOMContentLoaded", () => {
         showError(field, "Date of birth cannot be in the future.");
         return false;
       }
-      // optional age range check if you want to enforce min/max ages
-      // const age = today.getFullYear() - parsed.getFullYear() - (today < new Date(today.getFullYear(), parsed.getMonth(), parsed.getDate()) ? 1 : 0);
-      // if (age < 3 || age > 20) { showError(field, "Age must be between 3 and 20."); return false; }
+
+      // Age calculation only if this is the child form
+      if (form.id === "childForm") {
+        let age = today.getFullYear() - parsed.getFullYear();
+        const birthdayThisYear = new Date(today.getFullYear(), parsed.getMonth(), parsed.getDate());
+        if (today < birthdayThisYear) {
+          age -= 1;
+        }
+
+        if (age < 3 || age > 19) {
+          showError(field, "Age must be between 3 and 19 years.");
+          return false;
+        }
+      }
+
       clearError(field);
       return true;
     }
@@ -152,6 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Interests validation
     if (id === "interests") {
+      if (!value) {
+        showError(field, "Please enter at least one interest.");
+        return false;
+      }
       if (/[,.]$/.test(value)) {
         showError(field, "Interests must not end with a comma or full stop.");
         return false;

@@ -39,8 +39,9 @@
                 </span>
                 <!-- Academics button for this child -->
                 <button class="academics-btn" 
-                        onclick="window.location.href='/dashboard/academics/<%= firstChild.id %>'" 
+				        id="academicsBtn"
                         type="button">
+				
                     Plan
                 </button>
             </div>
@@ -126,3 +127,30 @@ Upcoming Events</h3>
 
 <!-- Client script for interactivity -->
 <script src="/js/dash.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const academicsBtn = document.getElementById('academicsBtn');
+  const childButtons = document.querySelectorAll('#children-selector .name-btn');
+
+  // Initialize with firstChild id
+  if (academicsBtn && childButtons.length > 0) {
+    academicsBtn.dataset.childId = childButtons[0].dataset.childId;
+    academicsBtn.addEventListener('click', () => {
+      const id = academicsBtn.dataset.childId;
+      window.location.href = `/dashboard/academics/${id}`;
+    });
+  }
+
+  // Update when another child is selected
+  childButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // mark active
+      childButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // update academics button target
+      academicsBtn.dataset.childId = btn.dataset.childId;
+    });
+  });
+});
+</script>

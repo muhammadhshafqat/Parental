@@ -96,13 +96,18 @@ input {
   text-decoration: underline;
 }
 
-.form-group input.touched:invalid {
+.form-group input.touched:invalid,
+.form-group input.error {
+  border: 2px dashed #9a0c0c;
+}
+
+.form-group input.touched:placeholder-shown {
   border: 2px dashed #9a0c0c;
 }
 
 .error-message {
   color: #b81010;
-  padding: 4px 0 0 12px; /* top right bottom left */
+  padding: 4px 0 0 12px;
   font-size: 0.85em;
   display: none;
 }
