@@ -38,6 +38,7 @@ export async function createNewChat(history: Content[] | null, systemInstruction
             config: {
                 safetySettings: safetySettings,
                 systemInstruction: systemInstruction,
+                tools: [{googleSearch: {}}]
             },
             ...(history && {history}) 
         }
