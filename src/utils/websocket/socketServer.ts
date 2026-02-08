@@ -5,6 +5,7 @@ import { marked } from "marked";
 import  {chatDbType} from  "../common";
 import ENV from "../../ENV/ENV";
 import { createClient } from '@supabase/supabase-js';
+import { RoleSchema } from "@modelcontextprotocol/sdk/types.js";
 
 
 
@@ -42,6 +43,12 @@ wss.on("connection", async (ws, request)=>{
         const incomingData:{role: string, message: string, chatId: string} = JSON.parse(data.toString());
         const prompt: string = incomingData.message;
         const chatId = incomingData.chatId;
+
+        if(incomingData.role== "user-location"){
+
+            // send to api and return result
+
+        }
 
         let chatHistory: Content[] | null = [];
 
@@ -100,7 +107,7 @@ wss.on("connection", async (ws, request)=>{
 
             ws.send(JSON.stringify(responseData));
 
-
+            return;
 
         }catch(err){
 
@@ -108,6 +115,7 @@ wss.on("connection", async (ws, request)=>{
             console.log(err); 
             ws.send(JSON.stringify(data)); 
 
+            return;
         }
 
     });
@@ -115,5 +123,6 @@ wss.on("connection", async (ws, request)=>{
 
     ws.on("close", ()=>{
         console.log("Disconnected");
+        return;
     });
 });

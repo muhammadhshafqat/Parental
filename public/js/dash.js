@@ -1,12 +1,92 @@
+const { json } = require("express");
+
 let currentChatId = null; // default if no child exists
 let socket = null;
 
+
+// ------------------------------ EVENT FINDING ------------------------ //
+
+// takes the form from createEventForm and displays it
+function showEventForm(event) {
+    // Prevent the form from trying to submit or the page from reloading
+    if(event) event.preventDefault();
+
+    // 1. Create the form using the function logic
+    const form = createEventForm(); 
+
+    // 2. Find where you want to put it. 
+    // I suggest the dashMainContainer or the aiDiv
+    const container = document.getElementById('aiDiv');
+    
+    // 3. Clear existing form if you don't want duplicates, then add it
+    const existing = document.querySelector('.event-finder-form');
+    if (existing) existing.remove();
+    
+    container.prepend(form); // Puts it at the top of the AI section
+}
+
+function sendCoords(coords){
+
+	socket.send(JSON.stringify({role: "client-location", message: JSON.stringify(coords)}));
+
+}
+
+function createEventForm() {
+	// Create Form Container
+	const form = document.createElement('form');
+	form.className = 'event-finder-form';
+
+	// --- 1. Top Section: Input Group ---
+	const inputGroup = document.createElement('div');
+	inputGroup.className = 'input-group';
+
+	const locationInput = document.createElement('input');
+	locationInput.type = 'text';
+	locationInput.placeholder = 'Enter city or address...';
+	locationInput.className = 'location-input';
+
+	inputGroup.append(locationInput);
+
+	// --- 2. Bottom Section: Action Buttons ---
+	const actionGroup = document.createElement('div');
+	actionGroup.className = 'action-group';
+
+	const backBtn = document.createElement('button');
+	backBtn.type = 'button'; // Prevent form submission
+	backBtn.className = 'back-btn';
+	backBtn.textContent = 'Back';
+	backBtn.onclick = () => window.history.back(); // Default back behavior
+
+	const submitBtn = document.createElement('button');
+	submitBtn.type = 'submit';
+	submitBtn.className = 'submit-btn';
+	submitBtn.textContent = 'Find';
+
+	actionGroup.append(backBtn, submitBtn);
+
+	// submission
+	form.addEventListener("submit", (event) =>{
+
+		event.preventDefault();
+
+		socket.send(JSON.stringify({role: "user-location", message: locationInput.value}));
+
+
+	});	
+
+	// Final Assembly
+	form.append(inputGroup, actionGroup);
+	return form;
+
+}
+
+
 function renderChatHistory(history) {
-    const chatContainer = document.querySelector(".chat-container");
-    chatContainer.innerHTML = "";
-    if (Array.isArray(history)) {
-        history.forEach(msg => insertMessage(msg.role, msg.message));
-    }
+	const chatContainer = document.querySelector(".chat-container");
+	chatContainer.innerHTML = "";
+	if (Array.isArray(history)) {
+		history.forEach(msg => insertMessage(msg.role, msg.message));
+	}
 }
 
 function insertMessage(role, message) {
@@ -51,10 +131,10 @@ function connectToServer() {
 			insertMessage(role, message);
 
 			const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
-        	if (activeChild) {
-            	if (!activeChild.chatHistory) activeChild.chatHistory = [];
-            	activeChild.chatHistory.push({ role, message });
-        	}
+			if (activeChild) {
+				if (!activeChild.chatHistory) activeChild.chatHistory = [];
+				activeChild.chatHistory.push({ role, message });
+			}
 
 		} catch (error) {
 			// If it's not JSON, treat it as plain text
@@ -83,10 +163,10 @@ const sendOnOpen = (prompt) => {
 		insertMessage("user", prompt);
 
 		const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
-        if (activeChild) {
-            if (!activeChild.chatHistory) activeChild.chatHistory = [];
-            activeChild.chatHistory.push({ role: "user", message: prompt });
-        }
+		if (activeChild) {
+			if (!activeChild.chatHistory) activeChild.chatHistory = [];
+			activeChild.chatHistory.push({ role: "user", message: prompt });
+		}
 
 		input.value = ''; // Clear input after sending
 	} else {
