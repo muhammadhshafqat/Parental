@@ -28,6 +28,8 @@
 .academics-btn{
 	padding: 6px 12px;
 	margin-left: 0px;
+	background-color: #218838;
+	color: var(--base);
 	border-radius: var(--radius);
 	border: 1px solid #ccc;
 	font-size: 16px;
@@ -36,13 +38,10 @@
 	align-items: center;
 	justify-content: center;
 	transition: background 0.2s ease, color 0.2s ease;
-	box-shadow: var(--shadow);
-
 }
 .academics-btn:hover {
-	background-color: var(--accent);
-	color: var(--base);
-
+	background: transparent;
+	color: #218838;
 }
 .logout-btn:hover {
 	background-color: var(--accent);
@@ -438,7 +437,7 @@ h3 svg {
 }
 #chat-form button:hover {
   background: transparent;
-  color: #111;
+  color: var(--accent);
   border-color: #ccc;
 }
 .event-btn-submit {
@@ -448,7 +447,7 @@ h3 svg {
 }
 .event-btn-submit:hover {
   background: transparent !important;
-  color: #111 !important;
+  color: #0c609a !important;
   border-color: #ccc !important;
 
 }
