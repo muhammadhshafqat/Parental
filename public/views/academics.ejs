@@ -1,0 +1,70 @@
+  <div class="acad-card">
+      <a class="back-nav-btn" href="/dashboard">&#8592; Back </a>
+    <h2>
+      <%= child.name %>'s Academic Schedule
+      <span class="age-tag <%= 
+        age < 13 ? 'age-child' : 
+        age <= 20 ? 'age-teen' : 
+        'age-adult' 
+      %>" id="childAge">
+        <%= age %> y/o
+      </span>
+    </h2>
+
+    <form id="checklistForm" onsubmit="return false;">
+      <div id="checklist">
+        <% checklist.forEach(function(item){ %>
+          <div class="checklist-item" data-id="<%= item.id %>">
+            <input type="checkbox" class="item-checked" <%= item.checked ? 'checked' : '' %> />
+            <input class="item-text" value="<%= item.text %>" />
+            <button type="button" class="remove-item">Remove</button>
+          </div>
+        <% }) %>
+      </div>
+    </form>
+          <!-- Action buttons row -->
+      <div class="form-actions">
+        <button id="addItem" type="button">Add item</button>
+        <button id="saveBtn" type="button">Save</button>
+      </div>
+  </div>
+
+  <script src="../js/checklist.js"></script>
+  <script>
+    const childId = "<%= child.id %>";
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const items = Array.from(document.querySelectorAll('.checklist-item')).map((el, idx) => ({
+        id: el.dataset.id,
+        text: el.querySelector('.item-text').value,
+        checked: el.querySelector('.item-checked').checked,
+        order: idx + 1
+      }));
+      const res = await fetch(`/dashboard/academics/${childId}/save`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ content: items, note: 'Saved from UI' })
+      });
+      const json = await res.json();
+      if (json.ok) alert('Saved');
+      else alert('Save failed: ' + (json.error || 'unknown'));
+    });
+
+    document.getElementById('addItem').addEventListener('click', () => {
+      const id = 'new-' + Math.random().toString(36).slice(2,9);
+      const container = document.getElementById('checklist');
+      const div = document.createElement('div');
+      div.className = 'checklist-item';
+      div.dataset.id = id;
+      div.innerHTML = `
+        <input type="checkbox" class="item-checked" />
+        <input class="item-text" value="New item" />
+        <button type="button" class="remove-item">Remove</button>`;
+      container.appendChild(div);
+      div.querySelector('.remove-item').addEventListener('click', () => div.remove());
+    });
+
+    document.querySelectorAll('.remove-item').forEach(btn =>
+      btn.addEventListener('click', (e) => e.target.closest('.checklist-item').remove())
+    );
+  </script>

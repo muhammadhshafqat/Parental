@@ -1,0 +1,129 @@
+@import url(root.css);
+
+.acad-card {
+  padding: 16px;
+  border-radius: var(--radi);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.acad-card h2 {
+  font-family: 'NM-B', sans-serif;
+  margin: 1rem 0;
+  color: var(--prime);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.age-tag {
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  border-radius: var(--radi);
+  font-family: 'NM-R', sans-serif;
+}
+
+.age-child {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.age-teen {
+  background: #ffeeba;
+  color: #856404;
+}
+
+.age-adult {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+/* Checklist form layout */
+#checklistForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 440px;       
+  overflow-y: auto;      
+  padding-right: 8px;
+}
+
+/* Checklist container */
+#checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: var(--radi);
+  background: #fafafa;
+}
+
+.item-checked {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.item-text {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  border-radius: var(--radi);
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  font-family: 'NM-R', sans-serif;
+}
+
+.remove-item {
+  border-radius: 10px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.remove-item:hover {
+  background-color: #9a0c0c;
+  color: var(--base);
+}
+
+#addItem,
+#saveBtn {
+  border-radius: var(--radi);
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#addItem:hover,
+#saveBtn:hover {
+  background-color: var(--accent);
+  color: var(--base);
+}
+
+/* Action buttons row */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+#addItem,
+#saveBtn {
+  flex: 1;
+  height: 40px;
+  font-size: 1rem;
+}

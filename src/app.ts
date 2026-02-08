@@ -39,6 +39,9 @@ app.use('/dashboard', dashRouter);
 import callbackRouter from "./routes/callbackRedirect";
 app.use('/callbackRedirect', callbackRouter);
 
+import academicsRouter from './routes/academics';
+app.use('/dashboard/academics', academicsRouter);
+
 // --------------------------------- ACTIVATING WEB SOCKET SERVER --------------------------//
 
 server.on("upgrade", (request, socket, head) => {
