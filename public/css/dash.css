@@ -25,7 +25,25 @@
 	transition: background 0.2s ease, color 0.2s ease;
 	box-shadow: var(--shadow);
 }
+.academics-btn{
+	padding: 6px 12px;
+	margin-left: 0px;
+	border-radius: var(--radius);
+	border: 1px solid #ccc;
+	font-size: 16px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.2s ease, color 0.2s ease;
+	box-shadow: var(--shadow);
 
+}
+.academics-btn:hover {
+	background-color: var(--accent);
+	color: var(--base);
+
+}
 .logout-btn:hover {
 	background-color: var(--accent);
 	color: var(--base);
@@ -404,6 +422,7 @@ h3 svg {
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
 }
+
 #chat-form button svg {
   width: 20px;
   height: 20px;
