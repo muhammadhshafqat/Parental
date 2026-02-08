@@ -1,9 +1,11 @@
-import { Content, GoogleGenAI, SafetySetting, HarmCategory, HarmBlockThreshold, Chat, GenerateContentResponse} from '@google/genai';
+import { Content, GoogleGenAI, SafetySetting, HarmCategory, HarmBlockThreshold, Chat, GenerateContentResponse, GenerateContentParameters} from '@google/genai';
 import ENV from "../../ENV/ENV";
 
 // --------------------------------------- AI CLIENT --------------------------
 const aiClient = new GoogleGenAI({apiKey:ENV.altGeminiKey});
 const MODEL_ID = "gemini-2.5-flash";
+
+
 
 const system_instruction:string  = "You are an expert on child education. Use formal language. You cannot generate images or sounds or video. You always provide information present in or backed by reputable sources.";
 const safetySettings:SafetySetting[] = [
@@ -36,12 +38,17 @@ export async function createNewChat(history: Content[] | null): Promise<Chat | n
 
 }
 
+// sends a prmopt to an api: for one time uses (multi turn chat not required)
+export async function sendPrompt(prompt: string): Promise<string>{
 
-export async function sendPromptToChat(prompt: string, chat: Chat): Promise<string>{
+    // send a prmopt to the model
+    const response = await aiClient.models.generateContent({
 
-    const response: GenerateContentResponse = await chat.sendMessage({
-        message: prompt,
+        model: "gemini-2.5-flash",
+        contents: prompt
+
     });
 
-    return response.data;
+
+    return response.text;
 }

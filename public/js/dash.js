@@ -1,4 +1,3 @@
-const { json } = require("express");
 
 let currentChatId = null; // default if no child exists
 let socket = null;
@@ -31,7 +30,9 @@ function sendCoords(coords){
 
 }
 
+
 function createEventForm() {
+	
 	// Create Form Container
 	const form = document.createElement('form');
 	form.className = 'event-finder-form';
@@ -69,7 +70,8 @@ function createEventForm() {
 
 		event.preventDefault();
 
-		socket.send(JSON.stringify({role: "user-location", message: locationInput.value}));
+		const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
+		socket.send(JSON.stringify({role: "user-location", message: JSON.stringify({location: locationInput.value, interests: activeChild.interests})}));
 
 
 	});	
@@ -108,6 +110,10 @@ function insertMessage(role, message) {
 
 }
 
+
+// ----------------------------------------------- SOCKET FUNCTION ----------------------//
+
+// attempts connecting to the server
 function connectToServer() {
 
 	console.log("Connecting to server......");
@@ -120,13 +126,28 @@ function connectToServer() {
 
 	});
 
+	socket.addEventListener("events", (data)=>{
+
+		const data = data.filtered;
+
+		// for each and shit
+
+	});
+
+	socket.addEventListener("events-error", ()=>{
+
+
+		// show no events
+
+	})
+
 	socket.addEventListener("message", (event) => {
+		
+		
 		try {
 			// Parse the JSON data from the WebSocket message
 			const data = JSON.parse(event.data);
 			const { role, message } = data;
-
-
 
 			insertMessage(role, message);
 
@@ -208,6 +229,7 @@ function sendPrompt() {
 document.addEventListener("DOMContentLoaded", () => {
 
 	connectToServer();
+	
 	const form = document.querySelector("#chat-form");
 	form.addEventListener("submit", (event) => {
 		event.preventDefault();
