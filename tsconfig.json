@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "nodenext",
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "target": "es6",
     "moduleResolution": "nodenext",

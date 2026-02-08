@@ -87,49 +87,44 @@ wss.on("connection", async (ws, request)=>{
     console.log("Connected to client");
 
 
+    // events ki request
+    ws.on("request-events", async (data)=>{
+
+
+        try {
+
+            // get data sent from client
+            const location:string = data.location;
+            const interests: string[] = data.interests;
+
+            // get events
+            const eventsResultUnstructured = await fetchEvents(location,interests);
+
+            // structure data
+            const structuredData:SearchResultEntry[] = extractSearchDetails(eventsResultUnstructured);
+
+
+            // filter data
+            const filtered:SearchResultEntry[] = await getFilteredEvents(structuredData, interests);
+            
+            // send to user
+            ws.emit("events", filtered);
+
+        }catch(err){
+
+            console.log("Error:", err);
+            ws.emit("events-error");
+        }
+        
+
+    })
+
+
     ws.on("message", async (data) =>{
 
         const incomingData:{role: string, message: string, chatId: string} = JSON.parse(data.toString());
         const prompt: string = incomingData.message;
         const chatId = incomingData.chatId;
-
-
-        if(incomingData.role === "request-events"){
-
-            console.log("Getting events");
-            const data = JSON.parse(incomingData.message);
-
-            try {
-                // get data sent from client
-                const location:string = data.location;
-                const interests: string[] = data.interests;
-
-                // get events
-                const eventsResultUnstructured = await fetchEvents(location,interests);
-
-                // structure data
-                const structuredData:SearchResultEntry[] = extractSearchDetails(eventsResultUnstructured);
-
-
-                // filter data
-                const filtered:SearchResultEntry[] = await getFilteredEvents(structuredData, interests);
-                
-                // send to user
-                ws.emit("events", filtered);
-
-                return;
-
-            }catch(err){
-
-                console.log("Error:", err);
-                ws.emit("events-error");
-
-                return;
-            }
-
-
-        }
-
 
 
         let chatHistory: Content[] | null = [];
