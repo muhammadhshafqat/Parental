@@ -56,7 +56,7 @@ function createEventForm() {
 	backBtn.type = 'button'; // Prevent form submission
 	backBtn.className = 'back-btn';
 	backBtn.textContent = 'Back';
-	backBtn.onclick = () => window.history.back(); // Default back behavior
+	backBtn.onclick = () => window.location.href='/dashboard';
 
 	const submitBtn = document.createElement('button');
 	submitBtn.type = 'submit';

@@ -2,7 +2,6 @@
 
 .acad-card {
   padding: 16px;
-  border-radius: var(--radi);
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -41,7 +40,6 @@
   color: #383d41;
 }
 
-/* Checklist form layout */
 #checklistForm {
   display: flex;
   flex-direction: column;
@@ -51,7 +49,6 @@
   padding-right: 8px;
 }
 
-/* Checklist container */
 #checklist {
   display: flex;
   flex-direction: column;
@@ -63,9 +60,6 @@
   align-items: center;
   gap: 12px;
   padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: var(--radi);
-  background: #fafafa;
 }
 
 .item-checked {
@@ -90,6 +84,11 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+}
+.remove-item svg{
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
 }
 
 .remove-item:hover {

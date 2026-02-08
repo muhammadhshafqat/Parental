@@ -325,7 +325,7 @@ h3 svg {
 
 /* -------------------------------------- EVENT FORM --------------*/ 
 .event-finder-form {
-    position: absolute; /* Floats over the chat */
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -442,14 +442,15 @@ h3 svg {
   border-color: #ccc;
 }
 .event-btn-submit {
-  background: transparent !important;
-  color: #111 !important;
-  border-color: #ccc !important;
-}
-.event-btn-submit:hover {
   background: #0c609a !important;
   color: #fff !important;
   border-color: #0c609a !important;
+}
+.event-btn-submit:hover {
+  background: transparent !important;
+  color: #111 !important;
+  border-color: #ccc !important;
+
 }
 
 .chat-container::-webkit-scrollbar {
