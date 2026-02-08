@@ -1,11 +1,11 @@
 import{ WebSocketServer }from "ws";
 import { Chat, Content, Part } from "@google/genai";
-import { createNewChat, sendPromptToChat } from "../ai/ai";
+import { createNewChat, sendPrompt } from "../ai/ai";
 import { marked } from "marked";
-import  {chatDbType} from  "../common";
+import  {chatDbType, SearchResultEntry} from  "../common";
 import ENV from "../../ENV/ENV";
 import { createClient } from '@supabase/supabase-js';
-
+import { fetchEvents } from "../ai/eventsFeature";
 
 
 // ----------------------------- USEFUL FUNCTIONS ---------------------------
@@ -25,6 +25,56 @@ function convertToParts(arr: { role: string, message: string }[]): Content[] {
 
     return parts;
 }
+// sends structured data to ai
+async function getFilteredEvents(structuredData: SearchResultEntry[], interests: string[]): Promise<SearchResultEntry[]>{
+
+    const prompt: string = `You are an AI assistant filtering search results for a user based on their specific interests.
+    
+    USER INTERESTS: [${interests.join(", ")}]
+    
+    SEARCH DATA:
+    ${JSON.stringify(structuredData, null, 2)}
+    
+    TASK:
+    1. Analyze each item in the SEARCH DATA.
+    2. Keep only the items that are highly relevant to the USER INTERESTS.
+    3. Return the filtered list as a valid JSON array of objects. 
+    4. Maintain the exact same structure: {name, place, data, time, url}.
+    5. DO NOT include any conversational text, only the JSON array.
+    `;
+
+    const response = await sendPrompt(prompt);
+
+    if (!response) {
+        return [];
+    } else {
+        try {
+            // 2. Clean the response of potential markdown code blocks
+            const cleanedResponse = response.replace(/```json|```/g, "").trim();
+            return JSON.parse(cleanedResponse);
+        } catch (error) {
+            console.error("Failed to parse Gemini response:", error);
+            return []; // Return empty array to avoid breaking downstream logic
+        }
+    }
+}
+
+//structures the raw data
+function extractSearchDetails(rawData: any): SearchResultEntry[] {
+  // Extract global metadata once
+  const place = rawData.search_parameters?.location_used ?? "Unknown Location";
+  const time = rawData.search_metadata?.processed_at ?? new Date().toISOString();
+
+  // Return a strictly typed array
+  return (rawData.organic_results || []).map((result: any): SearchResultEntry => ({
+    name: result.title || "Untitled",
+    place: place,
+    data: result.snippet || "No description available",
+    time: time,
+    url: result.link || ""
+  }));
+}
+
 
 // ----------------------------------------------  DATABASE CLIENT -----------------
 const supabase = createClient(ENV.supabaseUrl, ENV.supabasePublishableKey);
@@ -37,11 +87,45 @@ wss.on("connection", async (ws, request)=>{
     console.log("Connected to client");
 
 
+    // events ki request
+    ws.on("request-events", async (data)=>{
+
+
+        try {
+
+            // get data sent from client
+            const location:string = data.location;
+            const interests: string[] = data.interests;
+
+            // get events
+            const eventsResultUnstructured = await fetchEvents(location,interests);
+
+            // structure data
+            const structuredData:SearchResultEntry[] = extractSearchDetails(eventsResultUnstructured);
+
+
+            // filter data
+            const filtered:SearchResultEntry[] = await getFilteredEvents(structuredData, interests);
+            
+            // send to user
+            ws.emit("events", filtered);
+
+        }catch(err){
+
+            console.log("Error:", err);
+            ws.emit("events-error");
+        }
+        
+
+    })
+
+
     ws.on("message", async (data) =>{
 
         const incomingData:{role: string, message: string, chatId: string} = JSON.parse(data.toString());
         const prompt: string = incomingData.message;
         const chatId = incomingData.chatId;
+
 
         let chatHistory: Content[] | null = [];
 
@@ -54,7 +138,6 @@ wss.on("connection", async (ws, request)=>{
         }else{
 
             chatHistory = convertToParts(histData.messages);
-
 
         }
 
@@ -100,7 +183,7 @@ wss.on("connection", async (ws, request)=>{
 
             ws.send(JSON.stringify(responseData));
 
-
+            return;
 
         }catch(err){
 
@@ -108,6 +191,7 @@ wss.on("connection", async (ws, request)=>{
             console.log(err); 
             ws.send(JSON.stringify(data)); 
 
+            return;
         }
 
     });
@@ -115,5 +199,6 @@ wss.on("connection", async (ws, request)=>{
 
     ws.on("close", ()=>{
         console.log("Disconnected");
+        return;
     });
 });

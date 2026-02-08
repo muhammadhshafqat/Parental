@@ -43,3 +43,11 @@ export type chatDbType = {
     message: string
 
 };
+
+export type SearchResultEntry = {
+  name: string;  // The title of the search result
+  place: string; // The location context (e.g., "Lahore, Punjab, Pakistan")
+  data: string;  // The description or snippet text
+  time: string;  // The ISO or UTC timestamp of the search
+  url: string;   // The destination link
+};
