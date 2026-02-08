@@ -87,19 +87,6 @@ input {
   background-color: #DC794D;
   color: var(--base);
 }
-
-.page-icon{
-  width: 80px;
-  height: 80px;
-  display: block;
-  margin: 0 auto;
-  padding: 4px;
-  color: var(--accent);
-  border: 5px dashed #ccc;
-  border-radius: 12px;
-  margin-bottom: 0px;
-}
-
 .back-nav-btn{
   color: var(--accent);
   text-decoration: none;

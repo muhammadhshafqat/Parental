@@ -22,4 +22,21 @@
     <span class="auth-label">Don't have an account? <a href="/register">Create</a></span>
   </div>
   <script src="../js/forms.js"></script>
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="auth-alert">
+      <div class="auth-alert-content">
+        <button class="close-btn" onclick="closepopup()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+</svg>
+</button>
+        <p class="error-text"><%= error %></p>
+      </div>
+    </div>
+  <% } %>
 
+<script>
+  function closepopup () {
+    const btn = document.querySelector('.auth-alert');
+    btn.style.display = 'none';
+  }
+</script>

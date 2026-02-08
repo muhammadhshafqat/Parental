@@ -13,6 +13,7 @@ export const createClient =  (context: {req: Request, res: Response}) =>{
                 return parseCookieHeader(context.req.headers.cookie ?? '') as {name: string; value:string}[];
             },
             setAll(cookiesToSet){
+                if (context.res.headersSent) return;
                 cookiesToSet.forEach(({name, value}) =>{
                     context.res.appendHeader('Set-Cookie', serializeCookieHeader(name, value, {}));
                 });

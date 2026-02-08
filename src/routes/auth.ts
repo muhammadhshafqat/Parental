@@ -15,18 +15,26 @@ router.post('/login', async (req: Request, res:Response) => {
 
     const {email, password} = req.body;
 
-    const supabase = createClient({req, res});
+    if (!email || !password) {
+    return res.render('login', {
+      title: 'Login',
+      error: 'Email and password are required'
+    });
+  }
 
+    const supabase = createClient({req, res});
     const {data, error} = await supabase.auth.signInWithPassword({
         email,
         password,
     });
-    if (error) {
-        console.log(error.message);
-        return res.render('login', {title: 'Login', error: error.message});
-    }
-
-    res.cookie('sb-access-token', data.session.access_token, {httpOnly: true});
+    
+    
+  if (error) {
+    return res.status(401).render('login', {
+      title: 'Login',
+      error: 'Invalid email or password'
+    });
+  }
     res.redirect('/dashboard');
 })
 
