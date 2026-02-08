@@ -1,7 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 import * as appTypes from "../utils/common";
 import { createClient } from "../utils/database/server-database";
-import { Chat, Content, Part } from "@google/genai";
+const countries = require("../../public/dataFiles/google-countries.json");
+
 
 
 const dashRouter: Router = Router();
@@ -192,7 +193,8 @@ dashRouter.get("/", async (req: Request, res: Response) => {
 			children,
 			firstChild: children.length > 0 ? children[0] : null,
 			user: userRow, // <-- now has .name from your users table
-
+			countries: countries
+		
 		});
 	} catch (err) {
 		console.error("Dashboard route error:", err);

@@ -3,25 +3,33 @@ let currentChatId = null; // default if no child exists
 let socket = null;
 
 
-// ------------------------------ EVENT FINDING ------------------------ //
+// ------------------------------ EVENT FINDING ------------------------ //	
 
-// takes the form from createEventForm and displays it
+//  display form
 function showEventForm(event) {
-    // Prevent the form from trying to submit or the page from reloading
-    if(event) event.preventDefault();
 
-    // 1. Create the form using the function logic
-    const form = createEventForm(); 
+	const eventForm = document.querySelector("#event-form");
+	const locationInput = document.querySelector("#location-input");
+	// submission logic
+	eventForm.addEventListener("submit", (event) =>{
+		event.preventDefault();
+		const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
+		socket.send(JSON.stringify({role: "request-events", message: JSON.stringify({location: locationInput.value, interests: activeChild.interests}), chatId: currentChatId}));
+	});	
 
-    // 2. Find where you want to put it. 
-    // I suggest the dashMainContainer or the aiDiv
-    const container = document.getElementById('aiDiv');
-    
-    // 3. Clear existing form if you don't want duplicates, then add it
-    const existing = document.querySelector('.event-finder-form');
-    if (existing) existing.remove();
-    
-    container.prepend(form); // Puts it at the top of the AI section
+    // show the form 
+	eventForm.style.display = "grid";
+
+	// close form logic
+	const backBtnEventForm = document.querySelector("#event-form-close");
+	backBtnEventForm.addEventListener("click", (e)=>{
+
+		e.preventDefault();
+
+		eventForm.style.display = "none";
+
+	});
+
 }
 
 function sendCoords(coords){
@@ -30,58 +38,7 @@ function sendCoords(coords){
 
 }
 
-
-function createEventForm() {
-	
-	// Create Form Container
-	const form = document.createElement('form');
-	form.className = 'event-finder-form';
-
-	// --- 1. Top Section: Input Group ---
-	const inputGroup = document.createElement('div');
-	inputGroup.className = 'input-group';
-
-	const locationInput = document.createElement('input');
-	locationInput.type = 'text';
-	locationInput.placeholder = 'Enter city or address...';
-	locationInput.className = 'location-input';
-
-	inputGroup.append(locationInput);
-
-	// --- 2. Bottom Section: Action Buttons ---
-	const actionGroup = document.createElement('div');
-	actionGroup.className = 'action-group';
-
-	const backBtn = document.createElement('button');
-	backBtn.type = 'button'; // Prevent form submission
-	backBtn.className = 'back-btn';
-	backBtn.textContent = 'Back';
-	backBtn.onclick = () => window.location.href='/dashboard';
-
-	const submitBtn = document.createElement('button');
-	submitBtn.type = 'submit';
-	submitBtn.className = 'submit-btn';
-	submitBtn.textContent = 'Find';
-
-	actionGroup.append(backBtn, submitBtn);
-
-	// submission
-	form.addEventListener("submit", (event) =>{
-
-		event.preventDefault();
-
-		const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
-		socket.send(JSON.stringify({role: "user-location", message: JSON.stringify({location: locationInput.value, interests: activeChild.interests})}));
-
-
-	});	
-
-	// Final Assembly
-	form.append(inputGroup, actionGroup);
-	return form;
-
-}
-
+// ------------------------------- EVENT FORM -------------------- //
 
 function renderChatHistory(history) {
 	const chatContainer = document.querySelector(".chat-container");
@@ -131,13 +88,17 @@ function connectToServer() {
 		const data = res.filtered;
 
 		// for each and shit
+		data.forEach((item) =>{
 
+			console.log(item.name, " ", item.place);
+
+		});	
 	});
 
 	socket.addEventListener("events-error", ()=>{
 
-
 		// show no events
+		console.log("No events");
 
 	})
 
