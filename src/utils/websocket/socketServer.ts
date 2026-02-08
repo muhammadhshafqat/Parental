@@ -1,6 +1,6 @@
 import{ WebSocketServer }from "ws";
 import { Chat, Content, Part } from "@google/genai";
-import { createNewChat, sendPrompt } from "../ai/ai";
+import { createNewChat, sendPrompt, baseSystemInstruction } from "../ai/ai";
 import { marked } from "marked";
 import  {chatDbType, SearchResultEntry} from  "../common";
 import ENV from "../../ENV/ENV";
@@ -110,10 +110,13 @@ wss.on("connection", async (ws, request)=>{
             // send to user
             ws.emit("events", filtered);
 
+            return;
+
         }catch(err){
 
             console.log("Error:", err);
             ws.emit("events-error");
+            return;
         }
         
 
@@ -122,9 +125,11 @@ wss.on("connection", async (ws, request)=>{
 
     ws.on("message", async (data) =>{
 
-        const incomingData:{role: string, message: string, chatId: string} = JSON.parse(data.toString());
-        const prompt: string = incomingData.message;
+        //{role: string, message: {message, interests, events}, chatId: string}
+        const incomingData = JSON.parse(data.toString());
+        const prompt: string = incomingData.message.message;
         const chatId = incomingData.chatId;
+
 
 
         let chatHistory: Content[] | null = [];
@@ -141,7 +146,9 @@ wss.on("connection", async (ws, request)=>{
 
         }
 
-        const chat:Chat = await createNewChat(chatHistory); 
+        const systemInstruction = baseSystemInstruction + ` Remember these details: CHILD_NAME: ${incomingData.message.name} CHILD_INTERESTS: ${incomingData.message.interests} and UPCOMING EVENTS: ${JSON.stringify(incomingData.message.events)}` 
+
+        const chat:Chat = await createNewChat(chatHistory, systemInstruction); 
 
         try{
 
@@ -164,9 +171,9 @@ wss.on("connection", async (ws, request)=>{
             
             if(messageArr&& !error){
 
-                const currentArr = messageArr.messages || [];
+                const currentArr = messageArr.messages|| [];
 
-                currentArr.push({role: incomingData.role, message: incomingData.message});
+                currentArr.push({role: incomingData.role, message: incomingData.message.message});
                 currentArr.push(responseData);
 
                 const {error: upErr} = await supabase.from("Chats").update({messages: currentArr}).eq("id", chatId);

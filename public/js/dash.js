@@ -634,6 +634,8 @@ function connectToServer() {
             const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
             if (activeChild) {
                 if (!activeChild.chatHistory) activeChild.chatHistory = [];
+
+                if(role === "user-history")
                 activeChild.chatHistory.push({ role, message });
             }
 
@@ -654,14 +656,26 @@ function connectToServer() {
 }
 
 const sendOnOpen = (prompt) => {
+
     const input = document.querySelector("#name-input");
-    
+
     if (currentChatId) {
-        socket.send(JSON.stringify({ role: "user", message: prompt, chatId: currentChatId }));
+        
+        const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
+
+        const events = activeChild.events.map((ev) => ({
+            name: ev.name || ev.title || "Untitled Event",
+            location: ev.location || ev.address || "Location TBD",
+            time: ev.time || ev.date || new Date().toISOString(),
+            link: ev.link || null,
+        }));
+
+       
+
+        socket.send(JSON.stringify({ role: "user", message: {message: prompt, name: activeChild.name, interests: activeChild.interests, events: JSON.stringify(events)}, chatId: currentChatId }));
 
         insertMessage("user", prompt);
 
-        const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
         if (activeChild) {
             if (!activeChild.chatHistory) activeChild.chatHistory = [];
             activeChild.chatHistory.push({ role: "user", message: prompt });
