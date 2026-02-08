@@ -79,7 +79,7 @@ function renderEvents(events) {
             linkBtn.target = "_blank";
             linkBtn.rel = "noopener noreferrer";
             linkBtn.className = "event-link-btn";
-            linkBtn.textContent = "ℹ️ More Info";
+            linkBtn.textContent = "More Info";
             detailsDiv.appendChild(linkBtn);
         }
         
@@ -89,7 +89,7 @@ function renderEvents(events) {
         // Save button for individual event
         const saveBtn = document.createElement("button");
         saveBtn.className = "save-event-btn";
-        saveBtn.textContent = "💾 Save";
+        saveBtn.textContent = "Save";
         saveBtn.dataset.eventIndex = index.toString();
         saveBtn.onclick = async () => {
             await saveSingleEvent(ev, saveBtn);
@@ -107,7 +107,7 @@ function renderEvents(events) {
     
     const saveAllBtn = document.createElement("button");
     saveAllBtn.className = "save-all-events-btn";
-    saveAllBtn.textContent = "💾 Save All Events";
+    saveAllBtn.textContent = "Save All Events";
     saveAllBtn.onclick = () => saveAllEventsToDatabase(events);
     actionsDiv.appendChild(saveAllBtn);
     
@@ -207,7 +207,7 @@ async function saveSingleEvent(event, buttonElement) {
     }
     
     buttonElement.disabled = true;
-    buttonElement.textContent = "⏳ Saving...";
+    buttonElement.textContent = "Saving...";
     
     try {
         // Format the event data to match database schema
@@ -241,7 +241,7 @@ async function saveSingleEvent(event, buttonElement) {
         console.log("Save response:", data);
         
         if (data.success) {
-            buttonElement.textContent = "✅ Saved";
+            buttonElement.textContent = "Saved";
             buttonElement.classList.add("saved");
             buttonElement.style.backgroundColor = "#4CAF50";
             buttonElement.style.color = "white";
@@ -262,13 +262,13 @@ async function saveSingleEvent(event, buttonElement) {
         } else {
             alert("❌ Failed to save event: " + (data.error || "Unknown error"));
             buttonElement.disabled = false;
-            buttonElement.textContent = "💾 Save";
+            buttonElement.textContent = "Save";
         }
     } catch (error) {
         console.error("Error saving event:", error);
         alert("❌ Failed to save event. Please try again. Error: " + error.message);
         buttonElement.disabled = false;
-        buttonElement.textContent = "💾 Save";
+        buttonElement.textContent = "Save";
     }
 }
 
@@ -321,7 +321,7 @@ async function saveAllEventsToDatabase(events) {
         console.log("Save all response:", data);
         
         if (data.success) {
-            alert(`✅ Successfully saved ${data.count} event${data.count !== 1 ? 's' : ''} to ${activeChild.name}'s profile!`);
+            alert(`Successfully saved ${data.count} event${data.count !== 1 ? 's' : ''} to ${activeChild.name}'s profile!`);
             
             closeEventFinderModal();
             
@@ -427,22 +427,35 @@ function closeEventFinderModal() {
 }
 
 function createEventFinderModal() {
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'event-finder-modal';
-    
-    const modalContent = document.createElement('div');
-    modalContent.className = 'event-finder-modal-content';
-    
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'modal-close-btn';
-    closeBtn.innerHTML = '✖';
-    closeBtn.onclick = closeEventFinderModal;
-    modalContent.appendChild(closeBtn);
-    
-    const header = document.createElement('div');
-    header.className = 'modal-header';
-    header.innerHTML = '<h2>🔍 Find Events</h2>';
-    modalContent.appendChild(header);
+	const modalOverlay = document.createElement('div');
+	modalOverlay.className = 'event-finder-modal';
+
+	const modalContent = document.createElement('div');
+	modalContent.className = 'event-finder-modal-content';
+
+	// Use a div instead of form
+	const body = document.createElement('div');
+	body.className = 'event-finder-body';
+
+	// Header inside body
+	const header = document.createElement('div');
+	header.className = 'modal-header';
+
+	// Close button
+	const closeBtn = document.createElement('button');
+	closeBtn.type = 'button'; // still good practice
+	closeBtn.className = 'remove-item-event';
+	closeBtn.innerHTML = '✖';
+	closeBtn.style.display = 'none';
+	closeBtn.onclick = closeEventFinderModal;
+
+	// Build hierarchy
+	header.appendChild(closeBtn);
+	body.appendChild(header);
+
+	// Add body to modal
+	modalContent.appendChild(body);
+	modalOverlay.appendChild(modalContent);
     
     // Form container that includes both search and results
     const formContainer = document.createElement('div');
@@ -521,7 +534,7 @@ function createEventForm() {
     const submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
     submitBtn.className = 'submit-btn';
-    submitBtn.textContent = '🔍 Search Events';
+    submitBtn.textContent = 'Search Events';
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -541,17 +554,17 @@ function createEventForm() {
         }
         
         submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ Searching...';
+        submitBtn.textContent = 'Searching...';
         submitBtn.classList.add('loading');
         
         try {
             await fetchEventsFromBackend(location, activeChild.id);
         } catch (error) {
             console.error("Error in form submission:", error);
-            alert("❌ An error occurred while searching for events");
+            alert("An error occurred while searching for events");
         } finally {
             submitBtn.disabled = false;
-            submitBtn.textContent = '🔍 Search Events';
+            submitBtn.textContent = 'Search Events';
             submitBtn.classList.remove('loading');
         }
     });
