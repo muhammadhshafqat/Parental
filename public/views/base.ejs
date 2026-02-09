@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title> my</title>
+  <title>
+    <%= typeof title !== "undefined" ? title : "" %>
+
+
+  </title>
   <link rel="stylesheet" href="/css/main.css"> 
   <%- defineContent('head') %> 
 </head>
