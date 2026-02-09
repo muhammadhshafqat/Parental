@@ -1,39 +1,31 @@
 @import url(root.css);
-
-
-
 .event-form-top {
   display: flex;
   align-items: center;
 }
-
 .event-dropdown {
   flex: 1;
 }
 .remove-item-event {
-  display: inline-flex;       /* keeps content inside button aligned */
-  justify-content: center;    /* centers text inside button */
-  align-items: center;        /* centers text vertically */
+  display: inline-flex;     
+  justify-content: center;   
+  align-items: center;    
   border-radius: 10px;
-  margin-bottom: 4px;
-  margin-left: auto;          /* pushes button to the right */
   padding: 8px 12px;
   border: 1px solid #ccc;
+  background: white;
   font-size: 1rem;
   cursor: pointer;
   color: #9a0c0c;
   transition: background 0.2s ease, color 0.2s ease;
+  z-index: 9999;
+  position: relative;
 }
-
-/* hover state */
 .remove-item-event:hover {
   background-color: #9a0c0c;
   color: var(--base);
   border-color: #9a0c0c;
 }
-
-
-
 .event-finder-modal {
     position: fixed;
     top: 0;
@@ -51,6 +43,7 @@
 
 .event-finder-modal.show {
     opacity: 1;
+    padding-bottom: 32px;
 }
 
 .event-finder-modal-content {
@@ -65,7 +58,7 @@
     /* disable scrolling */
     overflow: hidden;
 
-    padding: 32px 40px;
+    padding: 32px 40px 48px 40px;
     position: relative;
 }
 
@@ -80,8 +73,18 @@
 
 .event-form-container {
     display: block;
-    min-height: 200px;
-    padding: 0 !important;
+    min-height: 160px;
+    padding: 24px;
+    padding-bottom: 0;
+    background: white;
+    border-radius: 16px;
+    position: relative;
+}
+
+.event-form-container .modal-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0px;
 }
 
 /* ============================================
@@ -91,10 +94,10 @@
 .event-finder-form {
     display: flex;
     gap: 10px;
-    padding: 20px;
-    background: #f5f5f5;
-    border-radius: var(--radi, 8px);
-    border: 1px solid #e0e0e0;
+    padding: 0;
+    background-color: #fff;
+    border: none;
+    box-shadow: none;
 }
 
 .input-group {
@@ -157,13 +160,12 @@
    SEARCH RESULTS
    ============================================ */
 .event-search-results {
-    background: #fff;
-    border-radius: 16px;
-    padding: 22px;
+    background: transparent;
+    border-radius: 0;
+    padding: 22px 0;
+    padding-top: 0px;
     min-height: 100px;
 }
-
-/* Back to Search Button */
 .back-to-search-btn {
     margin-bottom: 15px;
     padding: 10px 20px;
@@ -183,7 +185,7 @@
 }
 .events-header h3 {
     display: block;
-    margin: 0 auto 8px auto;  /* shorthand for top, sides, bottom */
+    margin: 0 auto 12px auto;  /* shorthand for top, sides, bottom */
     font-size: 20px;
     font-family: 'NM-B', sans-serif;
     text-align: center;       /* this centers the text */
@@ -319,10 +321,9 @@
 
 .events-actions {
     display: flex;
+    margin-top: 12px;
     justify-content: center;
     gap: 12px;
-    margin-top: 20px;
-    padding-top: 20px;
 }
 
 .save-all-events-btn {
@@ -381,7 +382,7 @@
     bottom: -100px;
     left: 50%;
     transform: translateX(-50%);
-    background: transparent;
+    background: #333;
     color: var(--base, white);
     padding: 15px 30px;
     border-radius: var(--radi, 8px);
@@ -441,16 +442,25 @@
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 768px) {
+        .event-form-container {
+        display: block;
+        min-height: 160px;
+        width: 100%;
+        padding: 14px;
+        background: white;
+        border-radius: 16px;
+        position: relative;
+    }
     .event-finder-modal-content {
-        width: 95%;
-        padding: 20px;
-        max-height: 95vh;
+        width: 100%;
+        padding: 16px;
+        max-height: 120vh;
         min-height: 300px;
     }
     
     .event-finder-form {
         flex-direction: column;
-        padding: 15px;
+        padding: 0;
     }
     
     .submit-btn {
@@ -484,25 +494,6 @@
     
     .search-events-list {
         max-height: 300px;
-    }
-}
-
-@media (max-width: 480px) {
-    .event-finder-modal-content {
-        padding: 15px;
-        min-height: 250px;
-    }
-    
-    .events-header h3 {
-        font-size: 18px;
-    }
-    
-    .event-details h4 {
-        font-size: 14px;
-    }
-    
-    .event-details p {
-        font-size: 0.85rem;
     }
 }
 
