@@ -13,11 +13,14 @@
             type="button">+</button>
         <% if (children && children.length> 0) { %>
             <% children.forEach(function(child, idx) { %>
-                <button class="name-btn <%= idx === 0 ? 'active' : '' %>" data-child-id="<%= child.id %>" type="button" data-chat-id="<%=child.chatId %>">
+                <button class="name-btn <%= idx === 0 ? 'active' : '' %>" 
+                        data-child-id="<%= child.id %>" 
+                        type="button" 
+                        data-chat-id="<%=child.chatId %>">
                     <%= child.name %>
                 </button>
-                <% }) %>
-                    <% } %>
+            <% }) %>
+        <% } %>
     </div>
 
     <!-- Data Section -->
@@ -35,144 +38,122 @@
                     <%= firstChild.age %> y/o
                 </span>
                 <!-- Academics button for this child -->
-                <button class="academics-btn" id="academicsBtn" type="button">
-
+                <button class="academics-btn" 
+				        id="academicsBtn"
+                        type="button">
+				
                     Plan
                 </button>
             </div>
 
             <div id="data-body">
                 <div class="data-section">
-                    <h3><svg style="color: #218838;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                            fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd"
-                                d="M12 6.75a5.25 5.25 0 0 1 6.775-5.025.75.75 0 0 1 .313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 0 1 1.248.313 5.25 5.25 0 0 1-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 1 1 2.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0 1 12 6.75ZM4.117 19.125a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z"
-                                clip-rule="evenodd" />
-                            <path
-                                d="m10.076 8.64-2.201-2.2V4.874a.75.75 0 0 0-.364-.643l-3.75-2.25a.75.75 0 0 0-.916.113l-.75.75a.75.75 0 0 0-.113.916l2.25 3.75a.75.75 0 0 0 .643.364h1.564l2.062 2.062 1.575-1.297Z" />
-                            <path fill-rule="evenodd"
-                                d="m12.556 17.329 4.183 4.182a3.375 3.375 0 0 0 4.773-4.773l-3.306-3.305a6.803 6.803 0 0 1-1.53.043c-.394-.034-.682-.006-.867.042a.589.589 0 0 0-.167.063l-3.086 3.748Zm3.414-1.36a.75.75 0 0 1 1.06 0l1.875 1.876a.75.75 0 1 1-1.06 1.06L15.97 17.03a.75.75 0 0 1 0-1.06Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Interests</h3>
+					<h3><svg style="color: #218838;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+  <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 0 1 6.775-5.025.75.75 0 0 1 .313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 0 1 1.248.313 5.25 5.25 0 0 1-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 1 1 2.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0 1 12 6.75ZM4.117 19.125a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clip-rule="evenodd" />
+  <path d="m10.076 8.64-2.201-2.2V4.874a.75.75 0 0 0-.364-.643l-3.75-2.25a.75.75 0 0 0-.916.113l-.75.75a.75.75 0 0 0-.113.916l2.25 3.75a.75.75 0 0 0 .643.364h1.564l2.062 2.062 1.575-1.297Z" />
+  <path fill-rule="evenodd" d="m12.556 17.329 4.183 4.182a3.375 3.375 0 0 0 4.773-4.773l-3.306-3.305a6.803 6.803 0 0 1-1.53.043c-.394-.034-.682-.006-.867.042a.589.589 0 0 0-.167.063l-3.086 3.748Zm3.414-1.36a.75.75 0 0 1 1.06 0l1.875 1.876a.75.75 0 1 1-1.06 1.06L15.97 17.03a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+</svg>
+Interests</h3>
                     <% if (Array.isArray(firstChild.interests) && firstChild.interests.length) { %>
                         <div id="childInterests">
                             <% firstChild.interests.forEach(function(interest) { %>
-                                <span class="interest-tag">
-                                    <%= interest %>
-                                </span>
-                                <% }) %>
+                                <span class="interest-tag"><%= interest %></span>
+                            <% }) %>
                         </div>
-                        <% } else { %>
-                            <p id="childInterests">No interests listed.</p>
-                            <% } %>
+                    <% } else { %>
+                        <p id="childInterests">No interests listed.</p>
+                    <% } %>
                 </div>
 
                 <div class="data-section">
-                    <h3><svg style="color: #0c609a;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                            fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd"
-                                d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Zm15-1.125a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0v.75a.75.75 0 0 0 1.5 0v-.75Zm-.75 3a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0v-.75a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0V18a.75.75 0 0 0 1.5 0v-.75ZM6 12a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 12Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Upcoming Events</h3>
+                    <h3><svg style="color: #0c609a;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+  <path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Zm15-1.125a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0v.75a.75.75 0 0 0 1.5 0v-.75Zm-.75 3a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0v-.75a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0V18a.75.75 0 0 0 1.5 0v-.75ZM6 12a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 12Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+</svg>
+Upcoming Events</h3>
                     <ul class="event-list" id="eventList">
                         <% if (firstChild.events && firstChild.events.length> 0) { %>
                             <% firstChild.events.forEach(function(ev) { %>
                                 <li>
-                                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=<%= encodeURIComponent(ev.name) %>&location=<%= encodeURIComponent(ev.location) %>"
+                                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=<%= encodeURIComponent(ev.name) %>&location=<%= encodeURIComponent(ev.location) %>&dates=<%= new Date(ev.time).toISOString().replace(/[-:]/g,'').split('.')[0] %>/<%= new Date(ev.time).toISOString().replace(/[-:]/g,'').split('.')[0] %>"
                                         target="_blank" rel="noopener noreferrer">
                                         <button class="calendar-btn">
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg"
                                                 alt="Google Calendar" width="18">
                                         </button>
                                     </a>
-                                    <span class="event-date">
-                                        <%= ev.time || 'Date TBD' %>
-                                    </span>
-
-                                    <a href="<%= ev.link %>">
-                                        <span class="event-name"> <%= ev.name %></span>
-                                    </a>
-
-
-                                    <span class="event-place">
-                                        <%= ev.location %>
-                                    </span>
+                                    <span class="event-date"><%= new Date(ev.time).toLocaleDateString() %></span>
+                                    <span class="event-name"><%= ev.name %></span>
+                                    <span class="event-place"><%= ev.location %></span>
                                 </li>
-                                <% }) %>
-                                    <% } else { %>
-                                        <li>No events yet</li>
-                                        <% } %>
+                            <% }) %>
+                        <% } else { %>
+                            <li>No events yet</li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
-            <% } else { %>
-                <div id="data-header">
-                    <h2 class="childName" id="childName">No child selected</h2>
-                    <span class="age-tag" id="childAge"></span>
-                </div>
-                <div id="data-body">
-                    <p>Add a child profile to see interests and events.</p>
-                </div>
-                <% } %>
+        <% } else { %>
+            <div id="data-header">
+                <h2 class="childName" id="childName">No child selected</h2>
+                <span class="age-tag" id="childAge"></span>
+            </div>
+            <div id="data-body">
+                <p>Add a child profile to see interests and events.</p>
+            </div>
+        <% } %>
     </div>
 
-    <div id="aiDiv">
-        <div class="invisible-spacing"></div>
-        <div class="chat-container">
+	<div id="aiDiv">
+		<div class="invisible-spacing"></div>
+		<div class="chat-container">
+		
+		</div>
 
-        </div>
+		<form id="chat-form">
+				<input type="text" name="prompt" id="name-input" />
+				<button type="submit"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+				</svg></button>
 
-        <form id="chat-form">
-            <input type="text" name="prompt" id="name-input" />
-            <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                </svg></button>
+		
+				<button type="submit"  class="event-btn-submit" name="event-btn-submit" id="event-btn-submit" onclick="showEventForm(event)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+				</svg>
+				</button>
 
-
-            <button type="submit" class="event-btn-submit" name="event-btn-submit" id="event-btn-submit"
-                onclick="showEventForm(event)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                </svg>
-            </button>
-
-        </form>
-    </div>
+		</form>
+	</div>
 </div>
 <div id="searchResults" class="search-results-container" style="display: none;"></div>
 
 <!-- Client script for interactivity -->
 <script src="/js/dash.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const academicsBtn = document.getElementById('academicsBtn');
-        const childButtons = document.querySelectorAll('#children-selector .name-btn');
+document.addEventListener('DOMContentLoaded', () => {
+  const academicsBtn = document.getElementById('academicsBtn');
+  const childButtons = document.querySelectorAll('#children-selector .name-btn');
 
-        // Initialize with firstChild id
-        if (academicsBtn && childButtons.length > 0) {
-            academicsBtn.dataset.childId = childButtons[0].dataset.childId;
-            academicsBtn.addEventListener('click', () => {
-                const id = academicsBtn.dataset.childId;
-                window.location.href = `/dashboard/academics/${id}`;
-            });
-        }
-
-        // Update when another child is selected
-        childButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // mark active
-                childButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                // update academics button target
-                academicsBtn.dataset.childId = btn.dataset.childId;
-            });
-        });
+  // Initialize with firstChild id
+  if (academicsBtn && childButtons.length > 0) {
+    academicsBtn.dataset.childId = childButtons[0].dataset.childId;
+    academicsBtn.addEventListener('click', () => {
+      const id = academicsBtn.dataset.childId;
+      window.location.href = `/dashboard/academics/${id}`;
     });
+  }
+
+  // Update when another child is selected
+  childButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // mark active
+      childButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // update academics button target
+      academicsBtn.dataset.childId = btn.dataset.childId;
+    });
+  });
+});
 </script>
 <script>
     window.childrenData = <%- JSON.stringify(children) %>;
