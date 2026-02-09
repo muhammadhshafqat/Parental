@@ -178,23 +178,62 @@ async function fetchEventsFromBackend(location, childId) {
     }
 }
 
-// Parse date string to ISO format
-function parseEventDate(dateString) {
-    if (!dateString || dateString === "Date TBD") {
-        return new Date().toISOString();
-    }
+// Just return the date string as-is - no parsing needed!
+function getEventDateString(dateString) {
+    return dateString || "Date TBD";
+}
+
+// Parse date ONLY for Google Calendar links (returns null if unparseable)
+function parseForCalendar(dateString) {
+
+    if (!dateString || dateString === "Date TBD") return null;
     
     try {
-        // Try to parse the date
-        const parsedDate = new Date(dateString);
-        if (!isNaN(parsedDate.getTime())) {
-            return parsedDate.toISOString();
+        const lowerDate = dateString.toLowerCase().trim();
+        const currentYear = new Date().getFullYear();
+        
+        // Handle "today"
+        if (lowerDate.includes('today')) {
+            return new Date();
+        }
+        
+        // Handle "tomorrow"
+        if (lowerDate.includes('tomorrow')) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow;
+        }
+        
+        // Handle month day patterns like "Feb 9", "June 14", etc.
+        // Add current year if missing
+        let dateToTry = dateString;
+        if (!dateString.match(/\d{4}/)) {
+            // No year present, add current year
+            // Check if it's just "Month Day" format
+            if (dateString.match(/^[A-Za-z]{3,9}\s+\d{1,2}$/)) {
+                dateToTry = `${dateString}, ${currentYear}`;
+            } else {
+                // Try appending year
+                dateToTry = `${dateString}, ${currentYear}`;
+            }
+        }
+        
+        // Try direct parsing
+        const parsed = new Date(dateToTry);
+        if (!isNaN(parsed.getTime())) {
+            return parsed;
+        }
+        
+        // If that didn't work, try original string
+        const parsedOriginal = new Date(dateString);
+        if (!isNaN(parsedOriginal.getTime())) {
+            return parsedOriginal;
         }
     } catch (e) {
-        console.warn("Could not parse date:", dateString);
+        console.warn("Could not parse for calendar:", dateString);
     }
     
-    return new Date().toISOString();
+    return null; // If parsing fails, calendar link won't have dates
 }
 
 // Save single event to database
@@ -210,14 +249,20 @@ async function saveSingleEvent(event, buttonElement) {
     buttonElement.textContent = "Saving...";
     
     try {
+        console.log("Original event data:", event);
+        console.log("Original date string:", event.date);
+
+        
         // Format the event data to match database schema
         const eventData = {
             name: event.title || 'Untitled Event',
             location: event.address || event.venue || 'Location TBD',
-            time: parseEventDate(event.date)
+            
+            time: getEventDateString(event.date)  // Just store the string as-is
         };
         
-        console.log("Saving single event:", eventData);
+        console.log("Formatted event data being saved:", eventData);
+        console.log("Date string:", eventData.time);
         
         const response = await fetch('/dashboard/events/save', {
             method: 'POST',
@@ -290,14 +335,19 @@ async function saveAllEventsToDatabase(events) {
     if (!confirmSave) return;
     
     try {
-        // Format events to match database schema
-        const formattedEvents = events.map(event => ({
-            name: event.title || 'Untitled Event',
-            location: event.address || event.venue || 'Location TBD',
-            time: parseEventDate(event.date)
-        }));
+        console.log("Original events to save:", events);
         
-        console.log("Saving all events:", formattedEvents);
+        // Format events to match database schema
+        const formattedEvents = events.map(event => {
+            console.log("Processing event:", event.title, "with date:", event.date);
+            return {
+                name: event.title || 'Untitled Event',
+                location: event.address || event.venue || 'Location TBD',
+                time: getEventDateString(event.date)  // Just store the string as-is
+            };
+        });
+        
+        console.log("Formatted events being saved:", formattedEvents);
         
         const response = await fetch('/dashboard/events/save', {
             method: 'POST',
@@ -364,11 +414,41 @@ function renderChildEvents(child) {
         child.events.forEach((ev) => {
             const li = document.createElement("li");
 
-            // Google Calendar button
+            // Google Calendar button with optional date parsing
             const a = document.createElement("a");
-            const eventTime = new Date(ev.time);
-            const formattedTime = eventTime.toISOString().replace(/[-:]/g, '').split('.')[0];
-            a.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ev.name)}&location=${encodeURIComponent(ev.location)}&dates=${formattedTime}/${formattedTime}`;
+            let calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ev.name)}&location=${encodeURIComponent(ev.location)}`;
+            
+            // Try to parse the date for the calendar link
+            const parsedDate = parseForCalendar(ev.time);
+            if (parsedDate) {
+                // Check if the original string contains time information
+                const hasTime = /\d{1,2}:\d{2}|am|pm/i.test(ev.time || '');
+                
+                if (hasTime) {
+                    // Has specific time - use the exact datetime
+                    const formattedTime = parsedDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+                    calendarUrl += `&dates=${formattedTime}/${formattedTime}`;
+                } else {
+                    // No specific time - create all-day event
+                    // Format: YYYYMMDD (just the date, no time)
+                    const year = parsedDate.getFullYear();
+                    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(parsedDate.getDate()).padStart(2, '0');
+                    const dateOnly = `${year}${month}${day}`;
+                    
+                    // For all-day events, end date is the next day
+                    const nextDay = new Date(parsedDate);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    const endYear = nextDay.getFullYear();
+                    const endMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+                    const endDay = String(nextDay.getDate()).padStart(2, '0');
+                    const endDateOnly = `${endYear}${endMonth}${endDay}`;
+                    
+                    calendarUrl += `&dates=${dateOnly}/${endDateOnly}`;
+                }
+            }
+            
+            a.href = calendarUrl;
             a.target = "_blank";
             a.rel = "noopener noreferrer";
 
@@ -379,9 +459,10 @@ function renderChildEvents(child) {
 
             li.appendChild(a);
 
+            // Display the ORIGINAL date string (e.g., "Tomorrow 7:00 PM", "Sat, Mar 15")
             const dateSpan = document.createElement("span");
             dateSpan.className = "event-date";
-            dateSpan.textContent = eventTime.toLocaleDateString();
+            dateSpan.textContent = ev.time || "Date TBD";
             li.appendChild(dateSpan);
 
             const nameSpan = document.createElement("span");

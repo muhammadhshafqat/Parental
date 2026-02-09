@@ -72,15 +72,33 @@ async function queryEvents(apiKey: string, query: string): Promise<any[]> {
 		console.log(`Query: "${query}" - Status:`, data.search_information?.events_results_state);
 		
 		if (data.events_results && Array.isArray(data.events_results) && data.events_results.length > 0) {
-			return data.events_results.map((event: any) => ({
-				title: event.title || 'Untitled Event',
-				date: event.date?.start_date || event.date?.when || 'Date TBD',
-				address: event.address || event.venue?.name || 'Location TBD',
-				link: event.link || null,
-				thumbnail: event.thumbnail || null,
-				venue: event.venue?.name || null,
-				description: event.description || null
-			}));
+			return data.events_results.map((event: any) => {
+				// Log the raw date data from SerpAPI
+				console.log("Raw event date data:", {
+					title: event.title,
+					start_date: event.date?.start_date,
+					when: event.date?.when,
+					full_date_object: event.date
+				});
+				
+				let dateStr = event.date?.start_date || event.date?.when || 'Date TBD';
+				
+				// Add year if it's missing (e.g., "Feb 9" -> "Feb 9, 2026")
+				if (dateStr && dateStr !== 'Date TBD' && !dateStr.match(/\d{4}/)) {
+					const currentYear = new Date().getFullYear();
+					dateStr = `${dateStr}, ${currentYear}`;
+				}
+				
+				return {
+					title: event.title || 'Untitled Event',
+					date: dateStr,
+					address: event.address || event.venue?.name || 'Location TBD',
+					link: event.link || null,
+					thumbnail: event.thumbnail || null,
+					venue: event.venue?.name || null,
+					description: event.description || null
+				};
+			});
 		}
 		
 		return [];
@@ -171,7 +189,7 @@ dashRouter.get("/", async (req: Request, res: Response) => {
 									id: ev.id,
 									name: ev.name,
 									location: ev.location,
-									time: ev.time ? new Date(ev.time).toISOString() : null,
+									time: ev.time || 'Date TBD',
 								}));
 						} else {
 							child.events = [];
@@ -331,10 +349,18 @@ dashRouter.post("/events/save", async (req: Request, res: Response) => {
 		
 		// Prepare events for insertion - match database schema exactly
 		const eventsToInsert = events.map((event: any) => {
+			// Handle location - might be array or string
+			let locationStr = 'Location TBD';
+			if (Array.isArray(event.location)) {
+				locationStr = event.location.filter(Boolean).join(', ');
+			} else if (event.location) {
+				locationStr = event.location;
+			}
+			
 			const eventData = {
 				name: event.name || 'Untitled Event',
-				location: event.location || 'Location TBD',
-				time: event.time || new Date().toISOString()
+				location: locationStr,
+				time: event.time || 'Date TBD'  // Store as string
 			};
 			console.log("Prepared event:", eventData);
 			return eventData;
