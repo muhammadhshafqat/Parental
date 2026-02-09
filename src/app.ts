@@ -56,7 +56,7 @@ server.on("upgrade", (request, socket, head) => {
 
 // ------------------------------------------------------- APP STARTUP ----------------------
 // CRITICAL FOR RAILWAY: Listen on 0.0.0.0, not localhost
-server.listen(port, '0.0.0.0', () => {
+server.listen(port, () => {
     console.log(`Server: http://localhost:${port}`);
     console.log(`WebSocket server ready`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
