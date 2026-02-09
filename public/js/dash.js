@@ -785,6 +785,7 @@ function sendPrompt() {
 // ------------------------------ INITIALIZATION ------------------------ //
 
 document.addEventListener("DOMContentLoaded", () => {
+
     connectToServer();
     
     const form = document.querySelector("#chat-form");
@@ -845,6 +846,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             renderChildEvents(child);
             renderChatHistory(child.chatHistory);
+
+
         });
     });
 });

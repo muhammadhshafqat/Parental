@@ -257,6 +257,8 @@ dashRouter.get("/", async (req: Request, res: Response) => {
 
 		console.debug("Children prepared for render:", JSON.stringify(children));
 
+		console.log(children[0].events[0].link);
+
 		res.render("dashboard", {
 			layout: "dashboard-base",
 			children,
