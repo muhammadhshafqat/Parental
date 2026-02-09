@@ -174,7 +174,7 @@ dashRouter.get("/", async (req: Request, res: Response) => {
 					try {
 						const { data: ceData, error: ceError } = await supabase
 							.from("ChildrenEvents")
-							.select("Events(id, name, location, time)")
+							.select("Events(id, name, location, time, link)")
 							.eq("child_id", child.id);
 
 						if (ceError) {
@@ -188,6 +188,7 @@ dashRouter.get("/", async (req: Request, res: Response) => {
 									id: ev.id,
 									name: ev.name,
 									location: ev.location,
+									link:ev.link,
 									time: ev.time || 'Date TBD',
 								}));
 						} else {
@@ -359,6 +360,7 @@ dashRouter.post("/events/save", async (req: Request, res: Response) => {
 			const eventData = {
 				name: event.name || 'Untitled Event',
 				location: locationStr,
+				link: event.link,
 				time: event.time || 'Date TBD'  // Store as string
 			};
 			console.log("Prepared event:", eventData);

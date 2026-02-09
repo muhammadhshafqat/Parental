@@ -257,7 +257,7 @@ async function saveSingleEvent(event, buttonElement) {
         const eventData = {
             name: event.title || 'Untitled Event',
             location: event.address || event.venue || 'Location TBD',
-            
+            link: event.link || "",
             time: getEventDateString(event.date)  // Just store the string as-is
         };
         
