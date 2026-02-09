@@ -559,7 +559,13 @@ function createEventFinderModal() {
 
 function sendCoords(coords){
     if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({role: "client-location", message: JSON.stringify(coords)}));
+        socket.send(JSON.stringify({
+            type: "location",
+            role: "client-location", 
+            message: JSON.stringify(coords)
+        }));
+    } else {
+        console.warn("Cannot send coords - socket not connected");
     }
 }
 
@@ -682,44 +688,40 @@ function insertMessage(role, message) {
 function connectToServer() {
     console.log("Connecting to server......");
 
-    // Instead of hardcoded localhost:
-    // const ws = new WebSocket('ws://localhost:3000/dashboard/chat');
-
-    // Use dynamic URL based on environment:
+    // Use dynamic URL based on environment - IMPORTANT: Assign to global socket variable
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host; // Gets current domain and port
-    const socket = new WebSocket(`${protocol}//${host}/dashboard/chat`);
-
+    const host = window.location.host;
+    
+    // DO NOT use const/let here - assign to the global socket variable
+    socket = new WebSocket(`${protocol}//${host}`);
 
     socket.addEventListener("open", () => {
         console.log("Connected to server");
     });
 
-    socket.addEventListener("events", (res) => {
-        const data = res.filtered;
-        console.log("Events received:", data);
-    });
-
-    socket.addEventListener("events-error", () => {
-        console.log("Events error");
-        renderNoEvents();
-    });
-
     socket.addEventListener("message", (event) => {
         try {
             const data = JSON.parse(event.data);
-            const { role, message } = data;
+            
+            // Handle different message types
+            if (data.type === "events") {
+                console.log("Events received:", data.data);
+                renderEvents(data.data);
+            } else if (data.type === "events-error") {
+                console.log("Events error");
+                renderNoEvents();
+            } else if (data.role) {
+                // Chat message
+                const { role, message } = data;
+                insertMessage(role, message);
 
-            insertMessage(role, message);
-
-            const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
-            if (activeChild) {
-                if (!activeChild.chatHistory) activeChild.chatHistory = [];
-
-                if(role === "user-history")
-                activeChild.chatHistory.push({ role, message });
+                const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
+                if (activeChild) {
+                    if (!activeChild.chatHistory) activeChild.chatHistory = [];
+                    if(role === "user-history")
+                        activeChild.chatHistory.push({ role, message });
+                }
             }
-
         } catch (error) {
             console.error("Error parsing message:", error);
             insertMessage("model", event.data);
@@ -729,6 +731,12 @@ function connectToServer() {
     socket.addEventListener("close", () => {
         console.log("Disconnected from server");
         socket = null;
+        
+        // Auto-reconnect after 3 seconds
+        setTimeout(() => {
+            console.log("Attempting to reconnect...");
+            connectToServer();
+        }, 3000);
     });
 
     socket.addEventListener("error", (err) => {
@@ -751,9 +759,18 @@ const sendOnOpen = (prompt) => {
             link: ev.link || null,
         }));
 
-       
-
-        socket.send(JSON.stringify({ role: "user", message: {message: prompt, name: activeChild.name, interests: activeChild.interests, events: JSON.stringify(events)}, chatId: currentChatId }));
+        // Add type: "chat" to match server expectations
+        socket.send(JSON.stringify({ 
+            type: "chat",
+            role: "user", 
+            message: {
+                message: prompt, 
+                name: activeChild.name, 
+                interests: activeChild.interests, 
+                events: JSON.stringify(events)
+            }, 
+            chatId: currentChatId 
+        }));
 
         insertMessage("user", prompt);
 
@@ -774,19 +791,28 @@ function sendPrompt() {
     const input = document.querySelector("#name-input");
     const prompt = input.value.trim();
 
-    if (prompt) {
-        if (!socket || (socket.readyState !== WebSocket.OPEN)) {
-            connectToServer();
+    if (!prompt) return;
 
-            if (socket.readyState === WebSocket.CONNECTING) {
-                socket.addEventListener('open', () => sendOnOpen(prompt), { once: true });
-            } else if (socket.readyState === WebSocket.OPEN) {
-                sendOnOpen(prompt);
-            }
-        } else {
-            sendOnOpen(prompt);
+    // Check if socket exists and is open
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+        console.log("Socket not ready, attempting to connect...");
+        
+        // Try to connect if not connected
+        if (!socket) {
+            connectToServer();
         }
+        
+        // Wait for connection, then send
+        if (socket && socket.readyState === WebSocket.CONNECTING) {
+            socket.addEventListener('open', () => sendOnOpen(prompt), { once: true });
+        } else {
+            alert("Unable to connect to chat. Please refresh the page.");
+        }
+        return;
     }
+
+    // Socket is ready, send the message
+    sendOnOpen(prompt);
 }
 
 // ------------------------------ INITIALIZATION ------------------------ //
