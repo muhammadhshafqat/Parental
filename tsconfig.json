@@ -5,9 +5,9 @@
     "target": "es6",
     "moduleResolution": "nodenext",
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "./dist",
     // "strict": true,
-    "rootDir": "src"
+    "rootDir": "./src"
   },
   "lib": ["es2015"]
 }
