@@ -24,6 +24,10 @@ alongside formal schooling.
 
     .
     ├── public/                 Static assets
+    │   ├── assets/                
+    │   ├── css/     
+    │   ├── js/                
+    │   ├── views/                 
     ├── src/
     │   ├── ENV/                Environment configuration helpers
     │   ├── routes/             Application route handlers
@@ -39,7 +43,7 @@ alongside formal schooling.
 ## Tech Stack
 
 -   Node.js
--   TypeScript
+-   TypeScript/JavaScript
 -   Express
 -   Supabase (PostgreSQL, authentication, storage)
 -   Google Gemini API (AI-powered reasoning and assistance)
@@ -89,19 +93,6 @@ Run the application in production mode:
 npm run build
 npm start
 ```
-
-Run linting:
-
-``` bash
-npm run lint
-```
-
-Type-check the project:
-
-``` bash
-npm run typecheck
-```
-
 ## Running the Application
 
 Once the server is running, open your browser and navigate to:
@@ -117,12 +108,3 @@ through the configured server endpoints.
 -   Supabase manages authentication and persistence.
 -   Gemini is used for AI-powered planning and reasoning.
 -   SerpAPI provides real-time search grounding for activity discovery.
-
-## Contributing
-
-Issues, feedback, and pull requests are welcome. Please open an issue
-before submitting major changes so they can be discussed first.
-
-## License
-
-See the LICENSE file for details.
