@@ -35,9 +35,8 @@ async function fetchEventsFromSerpAPI(location: string, interests: string[] = []
 		events = await queryEvents(apiKey, query1);
 	}
 	
-	// Second try: Location + "family events" or "kids events"
 	if (events.length === 0) {
-		const query2 = `${location} family events`;
+		const query2 = `${location} events`;
 		console.log("Trying query 2:", query2);
 		events = await queryEvents(apiKey, query2);
 	}
