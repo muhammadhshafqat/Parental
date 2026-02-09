@@ -158,7 +158,7 @@
    ============================================ */
 .event-search-results {
     background: #fff;
-    border-radius: var(--radi);
+    border-radius: 16px;
     padding: 22px;
     min-height: 100px;
 }
@@ -183,7 +183,7 @@
 }
 .events-header h3 {
     display: block;
-    margin: 0 auto 4px auto;  /* shorthand for top, sides, bottom */
+    margin: 0 auto 8px auto;  /* shorthand for top, sides, bottom */
     font-size: 20px;
     font-family: 'NM-B', sans-serif;
     text-align: center;       /* this centers the text */
@@ -218,7 +218,7 @@
 
 .event-item:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent, #4CAF50);
+    border-color: rgb(12, 96, 154);
 }
 
 .event-content {
@@ -381,7 +381,7 @@
     bottom: -100px;
     left: 50%;
     transform: translateX(-50%);
-    background: #333;
+    background: transparent;
     color: var(--base, white);
     padding: 15px 30px;
     border-radius: var(--radi, 8px);

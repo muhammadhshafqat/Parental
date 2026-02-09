@@ -28,8 +28,8 @@
 .academics-btn{
 	padding: 6px 12px;
 	margin-left: 0px;
-	background-color: #218838;
-	color: var(--base);
+	background-color: transparent;
+	color: var(--accent);
 	border-radius: var(--radius);
 	border: 1px solid #ccc;
 	font-size: 16px;
@@ -40,8 +40,8 @@
 	transition: background 0.2s ease, color 0.2s ease;
 }
 .academics-btn:hover {
-	background: transparent;
-	color: #218838;
+	background: var(--accent);
+	color: #fff;
 }
 .logout-btn:hover {
 	background-color: var(--accent);
@@ -238,10 +238,9 @@ h3 svg {
 
 .event-list li {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   font-size: 14px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--gray-200);
+  padding: 8px 0;
 }
 
 .event-date {
