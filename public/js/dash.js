@@ -688,9 +688,8 @@ function connectToServer() {
     // Use dynamic URL based on environment:
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const host = window.location.host; // Gets current domain and port
-    const ws = new WebSocket(`${protocol}//${host}/dashboard/chat`);
+    const socket = new WebSocket(`${protocol}//${host}/dashboard/chat`);
 
-    socket = new WebSocket("ws://localhost:3000/dashboard/chat");
 
     socket.addEventListener("open", () => {
         console.log("Connected to server");
