@@ -432,34 +432,25 @@ function createEventFinderModal() {
 
 	const modalContent = document.createElement('div');
 	modalContent.className = 'event-finder-modal-content';
-
-	// Use a div instead of form
-	const body = document.createElement('div');
-	body.className = 'event-finder-body';
-
-	// Header inside body
-	const header = document.createElement('div');
-	header.className = 'modal-header';
-
-	// Close button
-	const closeBtn = document.createElement('button');
-	closeBtn.type = 'button'; // still good practice
-	closeBtn.className = 'remove-item-event';
-	closeBtn.innerHTML = '✖';
-	closeBtn.style.display = 'none';
-	closeBtn.onclick = closeEventFinderModal;
-
-	// Build hierarchy
-	header.appendChild(closeBtn);
-	body.appendChild(header);
-
-	// Add body to modal
-	modalContent.appendChild(body);
-	modalOverlay.appendChild(modalContent);
     
     // Form container that includes both search and results
     const formContainer = document.createElement('div');
     formContainer.className = 'event-form-container';
+    
+    // Header with close button inside form container
+    const header = document.createElement('div');
+    header.className = 'modal-header';
+
+    // Close button
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'remove-item-event';
+    closeBtn.innerHTML = '✖';
+    closeBtn.onclick = closeEventFinderModal;
+
+    // Build header
+    header.appendChild(closeBtn);
+    formContainer.appendChild(header);
     
     // Form
     const form = createEventForm();
@@ -471,9 +462,11 @@ function createEventFinderModal() {
     resultsContainer.style.display = 'none';
     formContainer.appendChild(resultsContainer);
     
+    // Add form container to modal
     modalContent.appendChild(formContainer);
     modalOverlay.appendChild(modalContent);
     
+    // Close modal when clicking outside
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) {
             closeEventFinderModal();
@@ -542,14 +535,14 @@ function createEventForm() {
         const location = citySelect.value || locationInput.value.trim();
         
         if (!location) {
-            alert("⚠️ Please select a city or enter a custom location");
+            alert("Please select a city or enter a custom location");
             return;
         }
         
         const activeChild = childrenData.find(c => String(c.chatId) === String(currentChatId));
         
         if (!activeChild) {
-            alert("⚠️ No active child selected. Please select a child first.");
+            alert("No active child selected. Please select a child first.");
             return;
         }
         

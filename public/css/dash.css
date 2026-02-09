@@ -232,8 +232,8 @@ h3 svg {
 .event-list {
   list-style: none;
   padding: 0;
-  max-height: 240px; /* adjust height as needed */
-  overflow-y: auto;  /* enables vertical scrolling */
+  max-height: 240px; 
+  overflow-y: auto;
 }
 
 .event-list li {
